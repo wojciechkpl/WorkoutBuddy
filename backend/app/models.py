@@ -9,9 +9,20 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    full_name = Column(String, nullable=True)
+    first_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     goals = relationship("Goal", back_populates="owner")
+    gender = Column(String, nullable=False)
+    year_of_birth = Column(Integer, nullable=False)
+    height_ft = Column(Integer, nullable=False)
+    height_in = Column(Integer, nullable=False)
+    weight_lb = Column(Integer, nullable=False)
+    height_cm = Column(Integer, nullable=False)
+    weight_kg = Column(Integer, nullable=False)
+    activity_level = Column(String, nullable=False)
+    goal_type = Column(String, nullable=False)
+    goal_date = Column(DateTime, nullable=False)
 
 
 class Goal(Base):
@@ -22,7 +33,6 @@ class Goal(Base):
     target_date = Column(DateTime, nullable=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="goals")
-
 
 class Exercise(Base):
     __tablename__ = "exercises"

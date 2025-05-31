@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from . import models, schemas, crud, database, ml
 from passlib.context import CryptContext
+from .config import backend_config
 
 app = FastAPI()
 
@@ -46,3 +47,6 @@ def personalized_plan(user_id: int, db: Session = Depends(get_db)):
 
 
 # Routers for users, goals, ML, etc. will be included here as the app grows.
+
+# To run with custom host/port from config:
+# uvicorn main:app --host {backend_config.app.api_host} --port {backend_config.app.api_port} --reload
