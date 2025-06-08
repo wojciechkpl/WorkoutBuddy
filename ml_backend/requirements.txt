@@ -1,0 +1,39 @@
+# Core FastAPI stack
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+sqlalchemy>=2.0.20
+alembic>=1.12.0
+python-multipart>=0.0.6
+
+# Authentication & Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-dotenv>=1.0.0
+
+# WebSocket support
+websockets>=12.0
+
+# Use binary/wheel versions for Python 3.13 compatibility
+pydantic>=2.6.0
+typing-extensions>=4.9.0
+
+# AI and ML dependencies (use binary wheels)
+anthropic>=0.42.0  # Claude API for AI features
+numpy>=1.26.0
+pandas>=2.2.0
+scikit-learn>=1.4.0
+
+# Analytics and tracking
+posthog>=3.5.0
+requests>=2.31.0
+
+# Configuration management
+omegaconf>=2.3.0
+pyyaml>=6.0
+
+# Development and notebook support
+jupyter>=1.0.0
+notebook>=7.0.0
+ipywidgets>=8.0.0
+matplotlib>=3.8.0
+seaborn>=0.13.0 

@@ -1,601 +1,393 @@
-# WorkoutBuddy
+# 🏋️ WorkoutBuddy - AI-Powered Fitness Platform
 
-**A cross-platform fitness app that transforms personal health goals into social community experiences.**
+**WorkoutBuddy** is an intelligent fitness platform that combines machine learning with social features to create personalized workout experiences. The platform uses AI to generate custom workout plans, match users with compatible workout partners, and provide intelligent exercise recommendations.
 
-WorkoutBuddy combines personalized goal-setting with powerful social accountability features, using AI to create customized workout plans and match users with compatible fitness partners.
-
-## ✨ Key Features
-
-- **🎯 Personalized Goal Setting** - Set ambitious fitness targets (marathons, weekly workouts, yoga practice)
-- **🤖 AI-Powered Personalization** - Custom workout plans based on available time, equipment, and fitness level
-- **👥 Smart Teammate Matching** - Connect with like-minded individuals for motivation and accountability
-- **📊 Comprehensive Progress Tracking** - Detailed history of achievements and fitness journey
-- **🔗 Social Sharing** - Share accomplishments with friends and family
-- **💡 Intelligent Recommendations** - Data-driven suggestions for weights, reps, and training loads
-- **🔄 Recovery Optimization** - Smart recommendations for rest and recovery
-- **🏃‍♀️ Multi-Sport Support** - Running, strength training, yoga, and walking
-- **📱 Cross-Platform** - Works on iOS, Android, and Web
-
-## High-Level Architecture
+## 🏗️ Repository Structure
 
 ```
-+-------------------+         REST API         +-------------------+         SQL/ML         +-------------------+
-|    Flutter App    | <---------------------> |     FastAPI       | <-------------------> |   PostgreSQL DB   |
-|  (iOS/Android/Web)|                         |   (Python, ML)    |   (SQLAlchemy ORM)   |   + ML Models     |
-+-------------------+                         +-------------------+                      +-------------------+
-         |                                             |                                         
-         | 1. User interacts with UI                   |                                         
-         |-------------------------------------------->|                                         
-         |                                             |                                         
-         | 2. FastAPI handles requests,                |                                         
-         |    authentication, business logic           |                                         
-         |-------------------------------------------->|                                         
-         |                                             |                                         
-         | 3. FastAPI queries DB, runs ML models       |                                         
-         |<--------------------------------------------|                                         
-         |                                             |                                         
-         | 4. Results returned to user                 |                                         
-         |<--------------------------------------------|                                         
+WorkoutBuddy/
+├── ml_backend/                 # Python ML models and FastAPI backend
+│   ├── app/
+│   │   ├── main.py            # FastAPI application entry point
+│   │   ├── api/
+│   │   │   └── endpoints.py   # API routes for ML model serving
+│   │   ├── core/
+│   │   │   ├── model.py       # ML model loading & inference
+│   │   │   ├── preprocess.py  # Input data transformation
+│   │   │   ├── postprocess.py # Output formatting
+│   │   │   ├── models.py      # Database models
+│   │   │   └── schemas.py     # Pydantic schemas
+│   │   ├── services/          # Business logic services
+│   │   ├── alembic/           # Database migrations
+│   │   └── data/              # Exercise data and seed files
+│   ├── models/                # Trained ML models
+│   ├── requirements.txt
+│   └── Dockerfile
+├── flutter_app/               # Flutter mobile/web application (future)
+├── deploy/                    # Deployment configurations
+│   ├── docker-compose.yml     # Local development environment
+│   ├── start_dev.sh          # Development startup script
+│   └── cloud/                # Cloud deployment configs
+├── docs/                      # Documentation and analysis
+│   ├── notebooks/            # Jupyter notebooks for ML experiments
+│   └── reports/              # Analysis reports
+├── tests/                     # Test suites
+│   ├── python_api/           # Backend API tests
+│   └── flutter_e2e/          # End-to-end tests (future)
+└── README.md
 ```
 
-### **Components**
+## 🚀 Features
 
-- **Frontend (Flutter)**
-  - Cross-platform mobile/web app
-  - Handles user registration, login, goal setting, social features, progress tracking, and displays AI recommendations
-  - Communicates with backend via REST API
+- **🤖 AI-Powered Workout Plans**: Personalized workout generation using machine learning
+- **👥 Smart Community Matching**: Find compatible workout partners using similarity algorithms
+- **📊 Intelligent Exercise Recommendations**: AI-driven exercise suggestions based on goals and preferences
+- **📈 Progress Analytics**: Track and analyze fitness progress with ML insights
+- **🎯 A/B Testing Framework**: Built-in experimentation for feature optimization
+- **🔄 Real-time Adaptations**: Dynamic workout adjustments based on performance
 
-- **Backend (FastAPI)**
-  - Handles authentication, user management, goal tracking, social features, and ML endpoints
-  - Uses SQLAlchemy ORM and Alembic for database migrations
-  - Machine Learning: PyTorch and scikit-learn for personalized plans, recommendations, and teammate matching
+## 🛠️ Technology Stack
 
-- **Database (PostgreSQL)**
-  - Stores users, goals, progress, social connections, and exercises
-  - Exercises imported from `data/exercise_table_extended.md`
+### Backend (ML & API)
+- **FastAPI**: High-performance Python web framework
+- **PostgreSQL**: Primary database for user data and analytics
+- **SQLAlchemy**: ORM for database operations
+- **Alembic**: Database migration management
+- **Scikit-learn & PyTorch**: Machine learning frameworks
+- **Anthropic Claude**: AI-powered content generation
+- **PostHog**: Analytics and user behavior tracking
+- **Redis**: Caching and session management
 
-- **Machine Learning**
-  - PyTorch and scikit-learn models for:
-    - Personalized workout plans
-    - Teammate matching
-    - Intelligent recommendations
+### Infrastructure
+- **Docker**: Containerization for consistent environments
+- **Docker Compose**: Local development orchestration
+- **Railway**: Cloud deployment platform
+- **Jupyter**: ML experimentation and analysis
 
-## 🚀 How to Run (Development)
+## 🚀 Quick Start
 
-### Quick Start Backend (Step-by-Step)
+### Prerequisites
+- Docker and Docker Compose
+- Python 3.11+ (for local development)
+- PostgreSQL (if running without Docker)
 
-Follow these detailed steps to get the backend server running:
+> **💡 Configuration Note**: WorkoutBuddy uses a hybrid approach where API keys are loaded from environment variables (for security) while other settings are in config files (for simplicity). See the [Environment Variables & API Keys](#-environment-variables--api-keys) section for setup.
 
-#### **Step 1: Verify Prerequisites**
+### 1. Clone and Setup
+```bash
+git clone <repository-url>
+cd WorkoutBuddy
 
-**Check Python version:**
-```sh
-python3 --version  # Should be 3.8 or higher
+# Set up your API keys (see Environment Variables section)
+# Create .envrc file with your API keys
 ```
 
-**Check if PostgreSQL is installed:**
-```sh
-postgres --version
-# If not installed: brew install postgresql
+### 2. Start Development Environment
+```bash
+cd deploy
+./start_dev.sh
 ```
 
-**Install uv (Python package manager):**
-```sh
-# Install uv if not already installed
-curl -LsSf https://astral.sh/uv/install.sh | sh
+This script will:
+- Start PostgreSQL database
+- Build and run the ML backend
+- Set up Redis for caching
+- Launch Jupyter Lab for ML development
+- Run database migrations
+- Import exercise data
 
-# Or with Homebrew
-brew install uv
+### 3. Access Services
+- **🌐 ML Backend API**: http://localhost:8000
+- **📊 API Documentation**: http://localhost:8000/docs
+- **🗄️ Database**: localhost:5432 (admin/mypassword)
+- **🔴 Redis**: localhost:6379
+- **📔 Jupyter Lab**: http://localhost:8888
 
-# Verify installation
-uv --version
+## 🧪 API Usage Examples
+
+### Health Check
+```bash
+curl http://localhost:8000/
 ```
 
-#### **Step 2: Setup PostgreSQL Database**
-
-**Start PostgreSQL service:**
-```sh
-# Start PostgreSQL
-brew services start postgresql
-
-# Verify it's running
-brew services list | grep postgresql
-# Should show "started" status
-```
-
-**Create database and user:**
-```sh
-# Create the database
-createdb workoutbuddy
-
-# (Optional) Create a dedicated user
-psql postgres -c "CREATE USER workoutbuddy_user WITH PASSWORD 'your_password';"
-psql postgres -c "GRANT ALL PRIVILEGES ON DATABASE workoutbuddy TO workoutbuddy_user;"
-
-# Verify database exists
-psql -l | grep workoutbuddy
-```
-
-#### **Step 3: Configure Application**
-
-**Navigate to project root and update config:**
-```sh
-cd /path/to/WorkoutBuddy  # Navigate to your project root
-```
-
-**Edit `config.yaml`** and update the database URL:
-```yaml
-backend:
-  database:
-    # For default postgres user:
-    url: "postgresql://postgres@localhost/workoutbuddy"
-    
-    # Or for custom user:
-    url: "postgresql://workoutbuddy_user:your_password@localhost/workoutbuddy"
-```
-
-#### **Step 4: Setup Backend Dependencies**
-
-```sh
-# Navigate to backend directory
-cd backend
-
-# Install all dependencies and create virtual environment
-uv sync
-
-# Verify installation worked
-uv run python -c "import fastapi; print('FastAPI installed successfully')"
-```
-
-#### **Step 5: Setup Database Schema**
-
-```sh
-# Run database migrations to create tables
-uv run alembic upgrade head
-
-# Verify tables were created
-psql workoutbuddy -c "\dt"
-# Should show: users, goals, exercises tables
-```
-
-#### **Step 6: Import Exercise Data**
-
-```sh
-# Import exercises from the markdown file
-uv run python -m app.import_exercises
-
-# Verify exercises were imported
-psql workoutbuddy -c "SELECT COUNT(*) FROM exercises;"
-# Should show the number of imported exercises
-```
-
-#### **Step 7: Start the Backend Server**
-
-```sh
-# Start the FastAPI development server
-uv run uvicorn app.main:app --reload
-
-# Server will start on: http://127.0.0.1:8000
-```
-
-#### **Step 8: Verify Backend is Running**
-
-**Test the API endpoints:**
-```sh
-# Test health check endpoint
-curl http://127.0.0.1:8000/
-
-# Should return: {"message": "WorkoutBuddy API is running!"}
-
-# View API documentation
-open http://127.0.0.1:8000/docs
-# Opens interactive API documentation in browser
-```
-
-#### **Step 9: Test Core Functionality**
-
-**Register a test user:**
-```sh
-curl -X POST "http://127.0.0.1:8000/register" \
+### Generate Personalized Workout Plan
+```bash
+curl -X POST "http://localhost:8000/predict/workout-plan" \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "test@example.com",
-    "full_name": "Test User",
-    "password": "testpassword123"
+    "user_id": 1,
+    "duration_weeks": 4,
+    "workout_days_per_week": 3,
+    "equipment_available": ["bodyweight", "dumbbells"],
+    "fitness_goals": ["muscle_gain"]
   }'
 ```
 
-**Create a test goal:**
-```sh
-curl -X POST "http://127.0.0.1:8000/goals?user_id=1" \
+### Find Community Matches
+```bash
+curl -X POST "http://localhost:8000/predict/community-matches" \
   -H "Content-Type: application/json" \
   -d '{
-    "title": "Daily Exercise",
-    "description": "Exercise for 30 minutes daily",
-    "target_date": "2024-12-31T00:00:00"
+    "user_id": 1,
+    "max_matches": 5,
+    "compatibility_threshold": 0.7
   }'
 ```
 
-### **Common Backend Issues & Solutions**
-
-**❌ "Connection refused" when starting server:**
-```sh
-# Check if port 8000 is already in use
-lsof -i :8000
-
-# Kill existing process if needed
-kill -9 <PID>
-
-# Or use a different port
-uv run uvicorn app.main:app --reload --port 8001
+### Get Exercise Recommendations
+```bash
+curl -X POST "http://localhost:8000/predict/exercise-recommendations" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": 1,
+    "muscle_groups": ["chest", "shoulders"],
+    "equipment_available": ["bodyweight"],
+    "difficulty_level": "intermediate"
+  }'
 ```
-
-**❌ "No module named 'app'" error:**
-```sh
-# Make sure you're in the backend directory
-pwd  # Should end with /WorkoutBuddy/backend
-
-# Verify uv virtual environment is activated
-uv run python -c "import sys; print(sys.prefix)"
-```
-
-**❌ Database connection errors:**
-```sh
-# Test database connection manually
-psql workoutbuddy -c "SELECT 1;"
-
-# Check PostgreSQL is running
-brew services list | grep postgresql
-
-# Restart PostgreSQL if needed
-brew services restart postgresql
-```
-
-**❌ "Alembic not found" or migration errors:**
-```sh
-# Ensure you're in backend directory with alembic.ini
-ls alembic.ini  # Should exist
-
-# Reset and re-run migrations
-uv run alembic downgrade base
-uv run alembic upgrade head
-```
-
-### **Environment Variables (Alternative Setup)**
-
-Instead of editing `config.yaml`, you can use environment variables:
-
-```sh
-# Set database URL
-export DATABASE_URL="postgresql://postgres@localhost/workoutbuddy"
-
-# Set other optional variables
-export WORKOUTBUDDY_SECRET_KEY="your-secret-key-here"
-export WORKOUTBUDDY_DEBUG="true"
-
-# Start server with environment variables
-uv run uvicorn app.main:app --reload
-```
-
----
-
-### 1. **Prerequisites**
-- Python 3.8+
-- Flutter SDK
-- PostgreSQL
-- uv (Python package manager)
-
-### 2. **Backend Setup**
-
-#### a. Install uv (if not already installed)
-```sh
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-Or with Homebrew:
-```sh
-brew install uv
-```
-
-#### b. Install dependencies and set up project
-```sh
-cd backend
-uv sync
-```
-
-#### c. Install and start PostgreSQL
-- Install via Homebrew: `brew install postgresql`
-- Start: `brew services start postgresql`
-- Create database: `createdb workoutbuddy`
-
-#### d. Configure database connection
-- Edit `config.yaml` (project root) and set your PostgreSQL user and password in `backend.database.url`.
-
-#### e. Run Alembic migrations
-```sh
-uv run alembic upgrade head
-```
-
-#### f. Import exercises
-```sh
-uv run python -m app.import_exercises
-```
-
-#### g. Run the FastAPI server
-```sh
-uv run uvicorn app.main:app --reload
-```
-
-The API will be available at `http://127.0.0.1:8000`
-
----
-
-### 3. **Frontend Setup**
-
-#### a. Install Flutter (if not already)
-- [Flutter Install Guide](https://docs.flutter.dev/get-started/install)
-
-#### b. Get dependencies
-```sh
-cd frontend
-flutter pub get
-```
-
-#### c. Run the Flutter app
-```sh
-flutter run
-```
-
----
 
 ## 🧪 Testing
 
-### Backend Tests
-```sh
-cd backend
-uv run pytest
+### Run API Tests
+```bash
+cd tests/python_api
+python test_predict.py
 ```
 
-### Frontend Tests
-```sh
-cd frontend
-flutter test
+### Run with pytest
+```bash
+cd tests/python_api
+pytest test_predict.py -v
 ```
 
----
+## 🔧 Development
 
-## 🔧 Development Workflow
+### Local Development (without Docker)
+```bash
+cd ml_backend
 
-### Adding New Dependencies
+# Install dependencies
+pip install -r requirements.txt
 
-**Backend:**
-```sh
-cd backend
-uv add package-name              # Add runtime dependency
-uv add --dev package-name        # Add development dependency
+# Set up API keys (create .envrc file with direnv)
+# See "Environment Variables & API Keys" section below
+
+# Set Python path
+export PYTHONPATH="$(pwd)"
+
+# Run migrations (database URL is configured in config.yaml)
+alembic upgrade head
+
+# Import exercise data
+python -m app.import_exercises
+
+# Start the server
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-**Frontend:**
-```sh
-cd frontend
-flutter pub add package_name
+### Database Operations
+```bash
+# Connect to database
+docker-compose exec db psql -U admin -d workoutbuddy
+
+# Run migrations
+docker-compose exec ml_backend alembic upgrade head
+
+# Create new migration
+docker-compose exec ml_backend alembic revision --autogenerate -m "description"
 ```
 
-### Database Migrations
-```sh
-cd backend
-uv run alembic revision --autogenerate -m "description"
-uv run alembic upgrade head
+### View Logs
+```bash
+# All services
+docker-compose logs -f
+
+# Specific service
+docker-compose logs -f ml_backend
 ```
 
-### Running in Different Environments
-Update `config.yaml` for different environments (development, staging, production).
+## 📊 ML Model Development
 
----
+### Jupyter Notebooks
+Access Jupyter Lab at http://localhost:8888 for:
+- Data exploration and analysis
+- Model training and evaluation
+- Feature engineering experiments
+- Performance monitoring
 
-## 📁 Project Structure
-```
-WorkoutBuddy/
-  backend/
-    app/
-      main.py               # FastAPI application
-      models.py             # SQLAlchemy models
-      schemas.py            # Pydantic schemas
-      crud.py               # Database operations
-      database.py           # Database configuration
-      ml.py                 # Machine learning logic
-      import_exercises.py   # Exercise data importer
-      config.py             # Configuration loader
-      alembic/              # Database migrations
-      alembic.ini
-    pyproject.toml          # Python dependencies (uv)
-  data/
-    exercise_table_extended.md  # Exercise database
-  frontend/
-    lib/
-      main.dart             # Flutter main app
-      config.dart           # Configuration loader
-    assets/
-      config.yaml           # Frontend config copy
-    pubspec.yaml            # Flutter dependencies
-  config.yaml               # Unified configuration
-  README.md
-```
+### Model Training Pipeline
+1. **Data Preprocessing**: Transform raw user data into ML features
+2. **Feature Engineering**: Create meaningful features for recommendations
+3. **Model Training**: Train recommendation and matching algorithms
+4. **Evaluation**: Validate model performance and accuracy
+5. **Deployment**: Update production models with new versions
 
----
+## 🌐 Deployment
 
-## 🔧 Troubleshooting
+### Railway (Production)
+The application is configured for Railway deployment with automatic PostgreSQL provisioning.
 
-### Common Issues
+### Environment Variables
+Set these API keys in your production environment (other settings are in config files):
+- `ANTHROPIC_API_KEY`: Anthropic API key for AI features  
+- `POSTHOG_API_KEY`: PostHog analytics key
 
-**Backend won't start:**
-- Check PostgreSQL is running: `brew services list | grep postgresql`
-- Verify database exists: `psql -l | grep workoutbuddy`
-- Check config.yaml has correct database credentials
+Optional overrides (if needed):
+- `DATABASE_URL`: PostgreSQL connection string (overrides config.yaml)
+- `SECRET_KEY`: Application secret for JWT signing (overrides config.yaml)
 
-**Frontend can't connect to backend:**
-- Ensure backend is running on the correct port (check config.yaml)
-- Update `frontend.api_base_url` in config.yaml if needed
+## 📈 Analytics & Monitoring
 
-**Import exercises fails:**
-- Run migrations first: `uv run alembic upgrade head`
-- Check database connection and permissions
+- **PostHog Integration**: User behavior tracking and analytics
+- **A/B Testing Framework**: Built-in experimentation capabilities
+- **Performance Monitoring**: API response times and error tracking
+- **ML Model Metrics**: Recommendation accuracy and user satisfaction
 
-**uv commands not working:**
-- Install uv: `curl -LsSf https://astral.sh/uv/install.sh | sh`
-- Restart terminal after installation
+## 🤝 Contributing
 
----
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Notes
-- Make sure your backend server is running before using the frontend app.
-- Update API URLs in the Flutter app to point to your backend server if needed.
-- For production, set up environment variables and secure your database credentials.
+## 📄 License
 
----
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Environment Variables
+## 🆘 Support
 
-The backend uses the following environment variables:
+For support and questions:
+- Create an issue in the repository
+- Check the documentation in the `docs/` directory
+- Review API documentation at http://localhost:8000/docs
 
-- `DATABASE_URL`: PostgreSQL connection string. Example:
-  ```
-  postgresql://myuser:mypassword@localhost/workoutbuddy
-  ```
-  If not set, defaults to the value in `backend/app/database.py`.
+## 🔐 Environment Variables & API Keys
 
-- (Optional) You can set other environment variables for production, such as secret keys, email configs, etc.
+### Configuration Approach
 
-To set an environment variable temporarily:
-```sh
-export DATABASE_URL="postgresql://myuser:mypassword@localhost/workoutbuddy"
+WorkoutBuddy uses a **hybrid configuration approach**:
+- **API Keys**: Always loaded from environment variables (for security)
+- **Other Configuration**: Hardcoded in config files (for simplicity)
+
+### Required Environment Variables (API Keys Only)
+
+Create a `.envrc` file (for direnv) or set these environment variables:
+
+```bash
+# Required API Keys (always loaded from environment)
+export ANTHROPIC_API_KEY=your-anthropic-api-key-here
+export POSTHOG_API_KEY=your-posthog-api-key-here
 ```
 
----
+### For Local Development with direnv
 
-## API Usage Examples
+1. **Install direnv** (if not already installed):
+```bash
+# macOS
+brew install direnv
 
-### **Register a User**
-```http
-POST /register
-Content-Type: application/json
+# Ubuntu/Debian  
+sudo apt install direnv
 
-{
-  "email": "user@example.com",
-  "full_name": "John Doe",
-  "password": "yourpassword"
-}
+# Add to your shell profile (.zshrc, .bashrc)
+eval "$(direnv hook zsh)"  # or bash
 ```
 
-### **Create a Goal**
-```http
-POST /goals?user_id=1
-Content-Type: application/json
-
-{
-  "title": "Run a marathon",
-  "description": "Complete a marathon in 2024",
-  "target_date": "2024-12-31T00:00:00"
-}
+2. **Create .envrc file**:
+```bash
+# API Keys - loaded from environment variables for security
+export ANTHROPIC_API_KEY=your-anthropic-api-key-here
+export POSTHOG_API_KEY=your-posthog-api-key-here
 ```
 
-### **Get Personalized Plan (ML Endpoint)**
-```http
-POST /ml/personalized-plan?user_id=1
+3. **Allow direnv to load the environment**:
+```bash
+direnv allow
 ```
 
-### **Get Root (Health Check)**
-```http
-GET /
-```
+### Configuration Files
 
----
+Other settings are configured in YAML files:
+- **Database URL**: Set in `ml_backend/config.yaml` 
+- **Server settings**: Host, port, logging level in config files
+- **ML parameters**: Hyperparameters and model settings in YAML
+- **A/B testing**: Experiment configuration in config files
 
-## Config Usage Examples
-
-The app uses a unified `config.yaml` file at the project root for both backend and frontend settings.
-
-### **Backend Usage (Python)**
-
-Access settings in your Python code:
-```python
-from .config import backend_config
-
-# Database URL
-db_url = backend_config.database.url
-
-# ML model path
-model_path = backend_config.ml.model_path
-
-# App settings
-secret_key = backend_config.app.secret_key
-api_host = backend_config.app.api_host
-api_port = backend_config.app.api_port
-
-# Logging level
-log_level = backend_config.logging.level
-```
-
-### **Frontend Usage (Dart/Flutter)**
-
-Load and use config in your Flutter app:
-```dart
-import 'config.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final appConfig = await AppConfig.load();
-  runApp(MyApp(appConfig: appConfig));
-}
-
-// Use API base URL for requests
-Future<void> fetchData() async {
-  final url = Uri.parse('${appConfig.apiBaseUrl}/api/data');
-  final response = await http.get(url);
-  // Handle response...
-}
-
-// Toggle features based on flags
-Widget buildSocialFeatures() {
-  final enableSocial = appConfig.featureFlags['enable_social'] == true;
-  if (enableSocial) {
-    return SocialWidget();
-  }
-  return Container(); // Hide feature
-}
-```
-
-### **Environment-Specific Configuration**
-
-Update `config.yaml` for different environments:
-
-**Development:**
+**Example ml_backend/config.yaml**:
 ```yaml
-frontend:
-  api_base_url: http://127.0.0.1:8000
-  environment: development
+backend:
+  database:
+    url: "postgresql://wojciechkowalinski@localhost/workoutbuddy"
+  
+  app:
+    secret_key: "dev-secret-key-change-in-production"
+    api_host: "0.0.0.0" 
+    api_port: 8000
+    
+  # API keys are loaded from environment variables
+  # Other settings configured here
 ```
 
-**Production:**
+### For Production Deployment
+
+Set only the API keys as environment variables in your production environment:
+
+**Railway**:
+```bash
+railway variables set ANTHROPIC_API_KEY=your-anthropic-key
+railway variables set POSTHOG_API_KEY=your-posthog-key
+```
+
+**Docker**:
+```bash
+docker run -e ANTHROPIC_API_KEY=your-key -e POSTHOG_API_KEY=your-key ...
+```
+
+**Docker Compose**:
 ```yaml
-frontend:
-  api_base_url: https://api.workoutbuddy.com
-  environment: production
+environment:
+  - ANTHROPIC_API_KEY=your-anthropic-key
+  - POSTHOG_API_KEY=your-posthog-key
 ```
 
-### **Feature Flags Example**
+### Environment Variable Override (Optional)
 
-Enable/disable features without code changes:
-```yaml
-frontend:
-  feature_flags:
-    enable_social: true     # Show social features
-    enable_ai: false        # Hide AI features
-    enable_premium: true    # Show premium features
+While most configuration is in YAML files, you can still override any setting with environment variables if needed:
+
+```bash
+# Optional overrides (not required for normal operation)
+export DATABASE_URL=postgresql://custom-db-url
+export SECRET_KEY=custom-secret-key
+export LOG_LEVEL=DEBUG
+export API_PORT=3000
 ```
 
-Then in your Flutter code:
-```dart
-if (appConfig.featureFlags['enable_ai'] == true) {
-  // Show AI-powered recommendations
-}
-```
+### ⚠️ Security Best Practices
+
+1. **API Keys (REQUIRED from environment)**:
+   - ✅ Always load from environment variables
+   - ✅ Never commit to git repositories
+   - ✅ Use different keys for different environments
+   - ✅ Rotate keys regularly
+
+2. **Configuration Files**:
+   - ✅ Safe to commit to git (no secrets)
+   - ✅ Easy to modify and track changes
+   - ✅ Environment-specific config files supported
+
+3. **NEVER** add API keys to:
+   - Git repositories
+   - Shell configuration files (.zshrc, .bashrc)
+   - Docker images
+   - Code files
+
+4. **DO** use:
+   - Environment variables for API keys
+   - Config files for non-sensitive settings
+   - Secret management services in production
+   - `.envrc` with direnv for local development
+
+---
+
+**Happy coding! 🚀**
