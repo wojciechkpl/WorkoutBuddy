@@ -1,7 +1,27 @@
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 import joblib
+import numpy as np
+import pandas as pd
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+from app.database import get_db
+from app.ai_service import ai_service
 
+app = FastAPI()
+
+def get_user_analytics_data(user_id: str, db: Session) -> np.ndarray:
+    """Get user analytics data for ML processing"""
+    # TODO: Replace with actual database queries
+    # For now, return mock data in expected format
+    return np.array([
+        30,    # days_since_signup
+        5,     # total_goals
+        3,     # completed_goals
+        2.5,   # avg_checkins_per_week
+        10,    # community_messages_sent
+        1,     # fitness_level_encoded (0=beginner, 1=intermediate, 2=advanced)
+    ])
 
 class UserSegmentation:
     def __init__(self):

@@ -32,7 +32,7 @@ ml_service = MLService()
 app = FastAPI(
     title="WorkoutBuddy ML Backend API v3.0",
     description="AI-Powered Fitness Platform with Machine Learning Models",
-    version="3.0.0",
+    version="0.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
 )

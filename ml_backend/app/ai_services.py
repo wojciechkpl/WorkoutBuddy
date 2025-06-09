@@ -5,7 +5,6 @@ import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime, timedelta
 from pydantic import BaseModel
-import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import os
