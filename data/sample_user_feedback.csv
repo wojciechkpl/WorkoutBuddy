@@ -1,0 +1,11 @@
+user_email,feedback_date,community_impact_rating,accountability_effectiveness,motivation_improvement,adherence_improvement,most_helpful_feature,biggest_challenge,suggestions,would_recommend,likelihood_to_continue,primary_retention_driver
+sarah.johnson@email.com,2024-02-01,9,9,8,9,"Daily check-ins with Lisa","Sometimes feel guilty when I miss workouts","Maybe add more flexible check-in times",true,9,"Having someone who cares about my progress"
+mike.davis@email.com,2024-01-25,7,8,7,7,"Progress tracking and comparisons","Matching schedules with David","Better time zone coordination features",true,8,"Seeing consistent progress with accountability"
+james.wilson@email.com,2024-02-10,8,7,9,8,"Emotional support during tough days","Staying consistent with check-ins","More reminder notifications",true,8,"Knowing someone believes in me"
+maria.rodriguez@email.com,2024-01-30,9,8,9,8,"Learning from others' experiences","Confidence to share struggles","Group challenges or competitions",true,9,"Community makes me feel less alone"
+lisa.brown@email.com,2024-02-05,8,9,8,9,"Mutual accountability with Sarah","Balancing support vs honest feedback","Training on how to give better feedback",true,9,"The friendship that developed"
+david.taylor@email.com,2024-01-28,6,7,6,7,"Getting tips from Mike","Feeling pressure to always perform","More casual interaction options",true,7,"Progress tracking and milestones"
+nina.patel@email.com,2024-01-20,10,9,10,9,"Mindful community approach","Finding like-minded partners","Better matching algorithm",true,10,"Deep conversations about fitness philosophy"
+emily.chen@email.com,2024-01-15,5,6,5,6,"Goal setting structure","Too much social pressure","Option for private goals",false,4,"Prefer solo training approach"
+alex.kim@email.com,2024-01-18,7,7,6,7,"Technical workout discussions","Limited advanced athlete features","More performance analytics",true,7,"Data-driven approach to improvement"
+carlos.martinez@email.com,2024-02-02,8,8,7,8,"Competition preparation support","Finding serious training partners","Skill-level based matching",true,8,"Focus on performance goals" 

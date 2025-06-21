@@ -1,0 +1,17 @@
+user_email,title,description,target_date,is_public,wants_support,success_probability
+sarah.johnson@email.com,Lose 20 pounds,"Lose 20 pounds by summer through consistent workouts and diet",2024-06-01,true,true,0.75
+sarah.johnson@email.com,Run 5K,"Complete a 5K run without stopping",2024-05-15,true,true,0.85
+mike.davis@email.com,Build muscle mass,"Gain 15 pounds of lean muscle mass",2024-07-15,true,true,0.65
+mike.davis@email.com,Bench press bodyweight,"Be able to bench press my own bodyweight",2024-08-01,true,true,0.60
+emily.chen@email.com,Marathon training,"Complete my first marathon in under 4 hours",2024-05-20,false,false,0.90
+james.wilson@email.com,Weight loss journey,"Lose 40 pounds and improve overall health",2024-08-01,true,true,0.70
+james.wilson@email.com,Blood pressure control,"Lower blood pressure through exercise and diet",2024-06-15,false,true,0.80
+maria.rodriguez@email.com,Strength building,"Increase overall strength and confidence",2024-09-10,true,true,0.55
+maria.rodriguez@email.com,Learn proper form,"Master proper form for basic exercises",2024-07-01,true,true,0.85
+alex.kim@email.com,Triathlon preparation,"Complete Olympic distance triathlon",2024-06-30,false,false,0.95
+lisa.brown@email.com,Summer body goal,"Get in best shape for summer vacation",2024-07-20,true,true,0.68
+david.taylor@email.com,Gym confidence,"Feel confident and strong in the gym",2024-08-15,true,true,0.72
+david.taylor@email.com,Deadlift 2x bodyweight,"Deadlift twice my bodyweight safely",2024-10-01,true,true,0.50
+nina.patel@email.com,Yoga flexibility,"Achieve advanced yoga poses and flexibility",2024-05-15,true,true,0.88
+nina.patel@email.com,Mind-body connection,"Strengthen mind-body connection through fitness",2024-12-31,false,true,0.92
+carlos.martinez@email.com,Powerlifting competition,"Compete in local powerlifting competition",2024-09-01,true,false,0.78 

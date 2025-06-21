@@ -1,0 +1,145 @@
+version: '3.8'
+
+services:
+  # Database
+  db:
+    image: postgres:15-alpine
+    container_name: pulse_fitness_db
+    environment:
+      POSTGRES_DB: pulse_fitness
+      POSTGRES_USER: pulse
+      POSTGRES_PASSWORD: pulse123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - pulse_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pulse -d pulse_fitness"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: pulse_fitness_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - pulse_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend API
+  backend:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile
+    container_name: pulse_fitness_backend
+    environment:
+      - DATABASE_URL=postgresql://pulse:pulse123@db:5432/pulse_fitness
+      - REDIS_URL=redis://redis:6379
+      - ML_SERVICE_URL=http://ml-service:8001
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - POSTHOG_API_KEY=${POSTHOG_API_KEY}
+      - SECRET_KEY=${SECRET_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - DEBUG=${DEBUG}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - pulse_network
+    volumes:
+      - ./src/backend:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ML Service
+  ml-service:
+    build:
+      context: ./src/ml_service
+      dockerfile: Dockerfile
+    container_name: pulse_fitness_ml
+    environment:
+      - DATABASE_URL=postgresql://pulse:pulse123@db:5432/pulse_fitness
+      - REDIS_URL=redis://redis:6379
+      - BACKEND_API_URL=http://backend:8000
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - POSTHOG_API_KEY=${POSTHOG_API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+    ports:
+      - "8001:8001"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - pulse_network
+    volumes:
+      - ./src/ml_service:/app
+      - ml_models:/app/models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend (Flutter Web) - Temporarily disabled
+  # frontend:
+  #   build:
+  #     context: ./src/mobile
+  #     dockerfile: Dockerfile
+  #   container_name: pulse_fitness_frontend
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - backend
+  #     - ml-service
+  #   networks:
+  #     - pulse_network
+  #   environment:
+  #     - BACKEND_URL=http://backend:8000
+  #     - ML_SERVICE_URL=http://ml-service:8001
+
+  # Nginx Reverse Proxy - Temporarily disabled
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: pulse_fitness_nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
+  #     - ./ssl:/etc/nginx/ssl
+  #   depends_on:
+  #     - backend
+  #     - ml-service
+  #     - frontend
+  #   networks:
+  #     - pulse_network
+
+volumes:
+  postgres_data:
+  redis_data:
+  ml_models:
+
+networks:
+  pulse_network:
+    driver: bridge 

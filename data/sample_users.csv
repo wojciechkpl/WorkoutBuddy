@@ -1,0 +1,11 @@
+email,first_name,last_name,gender,year_of_birth,height_ft,height_in,weight_lb,height_cm,weight_kg,activity_level,goal_type,goal_date,wants_accountability_partner,accountability_preference,motivation_style,time_zone,preferred_check_in_frequency,retention_score,community_engagement_score
+sarah.johnson@email.com,Sarah,Johnson,female,1992,5,4,135,162,61,intermediate,weight_loss,2024-06-01,true,workout_partner,encouraging,EST,daily,8.5,7.2
+mike.davis@email.com,Mike,Davis,male,1988,6,1,180,185,82,beginner,muscle_gain,2024-07-15,true,progress_checker,competitive,PST,weekly,6.8,5.1
+emily.chen@email.com,Emily,Chen,female,1995,5,6,125,168,57,advanced,general_fitness,2024-05-20,false,,analytical,CST,bi-weekly,9.2,8.7
+james.wilson@email.com,James,Wilson,male,1985,5,10,200,178,91,intermediate,weight_loss,2024-08-01,true,community_group,encouraging,EST,daily,7.3,6.4
+maria.rodriguez@email.com,Maria,Rodriguez,female,1990,5,2,140,157,64,beginner,strength_training,2024-09-10,true,goal_supporter,competitive,MST,weekly,5.9,4.2
+alex.kim@email.com,Alex,Kim,male,1993,5,8,155,173,70,advanced,endurance,2024-06-30,false,,analytical,PST,weekly,8.1,7.8
+lisa.brown@email.com,Lisa,Brown,female,1987,5,5,150,165,68,intermediate,weight_loss,2024-07-20,true,workout_partner,encouraging,EST,daily,7.8,6.9
+david.taylor@email.com,David,Taylor,male,1991,6,0,175,183,79,beginner,muscle_gain,2024-08-15,true,progress_checker,competitive,CST,bi-weekly,6.2,5.5
+nina.patel@email.com,Nina,Patel,female,1989,5,3,128,160,58,advanced,general_fitness,2024-05-15,true,community_group,analytical,EST,weekly,9.0,8.4
+carlos.martinez@email.com,Carlos,Martinez,male,1986,5,11,190,180,86,intermediate,strength_training,2024-09-01,false,,encouraging,PST,daily,7.5,6.7 

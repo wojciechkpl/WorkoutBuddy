@@ -1,0 +1,25 @@
+user_email,goal_title,check_in_date,progress_percentage,is_on_track,confidence_level,notes,community_views,community_encouragement_count
+sarah.johnson@email.com,Lose 20 pounds,2024-01-15,15.0,true,8,"Started strong with meal prep and regular gym sessions",12,3
+sarah.johnson@email.com,Lose 20 pounds,2024-02-15,35.0,true,7,"Lost 7 pounds so far. Plateau this week but staying consistent",18,5
+sarah.johnson@email.com,Lose 20 pounds,2024-03-15,45.0,false,6,"Struggling with motivation. Had a few cheat days",22,8
+sarah.johnson@email.com,Run 5K,2024-01-20,20.0,true,9,"Can run 1K without stopping now. Building endurance",8,2
+sarah.johnson@email.com,Run 5K,2024-02-20,60.0,true,8,"Ran 3K today! Feeling great about progress",15,4
+mike.davis@email.com,Build muscle mass,2024-01-10,10.0,true,7,"Started lifting consistently. Learning proper form",10,1
+mike.davis@email.com,Build muscle mass,2024-02-10,25.0,true,8,"Gained 3 pounds. Seeing definition in arms",16,3
+mike.davis@email.com,Build muscle mass,2024-03-10,40.0,true,7,"Progress slowing but still gaining. Adjusted routine",20,5
+mike.davis@email.com,Bench press bodyweight,2024-01-15,30.0,true,6,"Currently benching 140lbs. Need to hit 180lbs",12,2
+emily.chen@email.com,Marathon training,2024-01-05,50.0,true,9,"Completed 15-mile long run. Feeling strong",5,1
+emily.chen@email.com,Marathon training,2024-02-05,70.0,true,9,"20-mile run completed. Taper phase starting soon",8,2
+james.wilson@email.com,Weight loss journey,2024-01-20,20.0,true,8,"Lost 8 pounds. Energy levels much better",25,7
+james.wilson@email.com,Weight loss journey,2024-02-20,35.0,false,6,"Plateau hit. Weight same for 2 weeks",28,9
+james.wilson@email.com,Blood pressure control,2024-01-25,40.0,true,7,"BP down from 140/90 to 130/85. Doctor pleased",15,4
+maria.rodriguez@email.com,Learn proper form,2024-01-30,60.0,true,8,"Mastered squat and deadlift form with trainer",20,6
+maria.rodriguez@email.com,Strength building,2024-02-15,25.0,true,6,"Increased weights on all exercises. Slow but steady",18,4
+alex.kim@email.com,Triathlon preparation,2024-01-10,80.0,true,9,"Swim and bike strong. Running improving",3,0
+lisa.brown@email.com,Summer body goal,2024-02-01,30.0,true,7,"Seeing muscle definition. Clothes fitting better",22,6
+lisa.brown@email.com,Summer body goal,2024-03-01,55.0,true,8,"Lost 12 pounds. Feeling confident for summer",30,10
+david.taylor@email.com,Gym confidence,2024-01-12,40.0,true,7,"Feel more comfortable in gym. Learning new exercises",14,3
+david.taylor@email.com,Deadlift 2x bodyweight,2024-02-12,20.0,true,5,"Currently deadlifting 250lbs. Long way to 350lbs",12,2
+nina.patel@email.com,Yoga flexibility,2024-01-08,70.0,true,9,"Can hold advanced poses. Flexibility greatly improved",18,5
+nina.patel@email.com,Mind-body connection,2024-01-15,60.0,true,8,"Meditation and yoga practice deepening awareness",12,3
+carlos.martinez@email.com,Powerlifting competition,2024-01-18,45.0,true,8,"All lifts improving. Squat PR last week",8,1 
