@@ -8,19 +8,16 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
-    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
+# Copy requirements and install Python dependencies
 COPY Requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r Requirements.txt
 
 # Copy application code
 COPY . .
 
-# Create directories for ML models
+# Create models directory
 RUN mkdir -p /app/models
 
 # Create non-root user
@@ -28,11 +25,11 @@ RUN useradd -m -u 1000 mluser && chown -R mluser:mluser /app
 USER mluser
 
 # Expose port
-EXPOSE 8001
+EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8001/health || exit 1
+    CMD curl -f http://localhost:8000/health || exit 1
 
 # Run the application
-CMD ["python", "main.py"] 
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]

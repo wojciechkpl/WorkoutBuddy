@@ -2,20 +2,20 @@
 Pytest configuration and fixtures for ML service tests
 """
 
+import os
+import sys
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
-import os
-import sys
 
 # Add the app directory to the path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from app.api import app
 from app.database import Base, get_db
-from app.config import settings
 
 # Test database URL
 TEST_DATABASE_URL = "sqlite:///:memory:"
@@ -30,6 +30,7 @@ test_engine = create_engine(
 # Create test session
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
 
+
 def override_get_db():
     """Override database dependency for testing"""
     try:
@@ -38,6 +39,7 @@ def override_get_db():
     finally:
         db.close()
 
+
 @pytest.fixture(scope="session")
 def test_db():
     """Create test database"""
@@ -45,19 +47,21 @@ def test_db():
     yield test_engine
     Base.metadata.drop_all(bind=test_engine)
 
+
 @pytest.fixture
 def db_session(test_db):
     """Create database session for each test"""
     connection = test_db.connect()
     transaction = connection.begin()
-    
+
     session = TestingSessionLocal(bind=connection)
-    
+
     yield session
-    
+
     session.close()
     transaction.rollback()
     connection.close()
+
 
 @pytest.fixture
 def client(db_session):
@@ -66,6 +70,7 @@ def client(db_session):
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+
 
 @pytest.fixture
 def test_user_data():
@@ -77,8 +82,9 @@ def test_user_data():
         "fitness_goal": "strength",
         "experience_level": "beginner",
         "height_cm": 175,
-        "weight_kg": 70.0
+        "weight_kg": 70.0,
     }
+
 
 @pytest.fixture
 def test_exercise_data():
@@ -90,5 +96,5 @@ def test_exercise_data():
         "muscle_group": "Chest",
         "equipment": "Bodyweight",
         "difficulty_level": "Beginner",
-        "instructions": "Start in plank position..."
-    } 
+        "instructions": "Start in plank position...",
+    }

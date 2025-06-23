@@ -3,7 +3,20 @@
 ML package initialization
 """
 
-from app.UserSimilarityModel import UserSimilarityModel
-from app.ExerciseRecommender import ExerciseRecommender
+from app.ai_services import (
+    ChallengeResponse,
+    CommunityMatchResponse,
+    EncouragementResponse,
+    ai_service,
+)
+from app.exercise_recommender import ExerciseRecommender
+from app.user_similarity_model import UserSimilarityModel
 
-__all__ = ["UserSimilarityModel", "ExerciseRecommender"]
+__all__ = [
+    "UserSimilarityModel",
+    "ExerciseRecommender",
+    "ai_service",
+    "ChallengeResponse",
+    "CommunityMatchResponse",
+    "EncouragementResponse",
+]

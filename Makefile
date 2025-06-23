@@ -1,4 +1,4 @@
-# Pulse Fitness Makefile
+git # Pulse Fitness Makefile
 
 .PHONY: help build up down logs clean restart status
 
@@ -119,4 +119,4 @@ health:
 	@echo "Checking service health..."
 	@curl -f http://localhost/health || echo "Backend health check failed"
 	@curl -f http://localhost/ml-health || echo "ML service health check failed"
-	@curl -f http://localhost || echo "Frontend health check failed" 
+	@curl -f http://localhost || echo "Frontend health check failed"

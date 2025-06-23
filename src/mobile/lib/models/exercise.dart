@@ -29,7 +29,7 @@ class Exercise {
       name: json['name'],
       description: json['description'] ?? '',
       primaryMuscle: json['primary_muscle'] ?? '',
-      muscleGroups: json['muscle_groups'] != null 
+      muscleGroups: json['muscle_groups'] != null
           ? (json['muscle_groups'] as String).split(',').map((e) => e.trim()).toList()
           : [],
       equipment: json['equipment'] ?? '',
@@ -54,4 +54,4 @@ class Exercise {
       'mets': mets,
     };
   }
-} 
+}

@@ -127,7 +127,7 @@ _____________________________________________________
 
 **16. How comfortable are you with different types of equipment?**
 - **Bodyweight exercises:** Comfortable / Somewhat / Not comfortable
-- **Dumbbells:** Comfortable / Somewhat / Not comfortable  
+- **Dumbbells:** Comfortable / Somewhat / Not comfortable
 - **Barbells:** Comfortable / Somewhat / Not comfortable
 - **Machines:** Comfortable / Somewhat / Not comfortable
 - **Free weights in general:** Comfortable / Somewhat / Not comfortable
@@ -144,7 +144,7 @@ _____________________________________________________
 
 **18. How would you rate your current stress levels?**
 - [ ] Low stress
-- [ ] Moderate stress  
+- [ ] Moderate stress
 - [ ] High stress
 - [ ] Very high stress
 
@@ -234,7 +234,7 @@ _____________________________________________________
 ## Section 8: Quick Assessment Questions
 
 **29. Rate your current fitness level (1-10):**
-**Overall fitness:** _____ 
+**Overall fitness:** _____
 **Strength:** _____
 **Endurance:** _____
 **Flexibility:** _____
@@ -253,7 +253,7 @@ _____________________________________________________
 **Based on your answers, rank these factors in order of importance for your program (1-5):**
 
 - [ ] **Effectiveness** - Getting maximum results
-- [ ] **Convenience** - Easy to fit into schedule  
+- [ ] **Convenience** - Easy to fit into schedule
 - [ ] **Enjoyment** - Fun and engaging workouts
 - [ ] **Safety** - Low injury risk, appropriate progression
 - [ ] **Simplicity** - Easy to understand and follow

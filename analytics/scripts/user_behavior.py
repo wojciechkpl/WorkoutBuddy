@@ -1,8 +1,5 @@
 import pandas as pd
-import numpy as np
 from sqlalchemy import create_engine
-from datetime import datetime, timedelta
-import plotly.express as px
 
 
 class UserAnalytics:
@@ -12,7 +9,7 @@ class UserAnalytics:
     def get_goal_completion_rates(self, days: int = 30) -> pd.DataFrame:
         """Calculate goal completion rates by category and user segment"""
         query = f"""
-        SELECT 
+        SELECT
             u.fitness_level,
             g.category,
             COUNT(*) as total_goals,
@@ -29,7 +26,7 @@ class UserAnalytics:
     def get_community_engagement_metrics(self) -> pd.DataFrame:
         """Analyze community engagement patterns"""
         query = """
-        SELECT 
+        SELECT
             c.id as community_id,
             c.name,
             COUNT(DISTINCT cm.user_id) as active_members,
@@ -48,20 +45,20 @@ class UserAnalytics:
         """Weekly cohort retention analysis"""
         query = """
         WITH user_weeks AS (
-            SELECT 
+            SELECT
                 user_id,
                 DATE_TRUNC('week', created_at) as signup_week,
                 DATE_TRUNC('week', created_at) as activity_week
             FROM users
             UNION
-            SELECT 
+            SELECT
                 user_id,
                 DATE_TRUNC('week', u.created_at) as signup_week,
                 DATE_TRUNC('week', ci.created_at) as activity_week
             FROM check_ins ci
             JOIN users u ON ci.user_id = u.id
         )
-        SELECT 
+        SELECT
             signup_week,
             activity_week,
             COUNT(DISTINCT user_id) as active_users

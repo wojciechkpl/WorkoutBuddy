@@ -34,9 +34,9 @@ class AuthService {
   }
 
   static Future<Map<String, dynamic>> register(
-    String username, 
-    String email, 
-    String password, 
+    String username,
+    String email,
+    String password,
     String fullName
   ) async {
     final response = await _dio.post(AppConfig.registerEndpoint, data: {
@@ -62,4 +62,4 @@ class AuthService {
     await StorageService.clearToken();
     await StorageService.clearUserData();
   }
-} 
+}

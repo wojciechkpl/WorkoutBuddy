@@ -3,6 +3,6 @@
 API package initialization
 """
 
-from app.api import auth, users, exercises, workouts, recommendations, social
+from app.api import auth, exercises, recommendations, social, users, workouts
 
 __all__ = ["auth", "users", "exercises", "workouts", "recommendations", "social"]

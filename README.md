@@ -13,6 +13,151 @@ The application is split into separate services:
 - **Redis** - Caching and session storage
 - **Nginx** - Reverse proxy and load balancer
 
+## 🗄️ Database Schema
+
+The application uses PostgreSQL with the following schema design:
+
+```mermaid
+erDiagram
+    users {
+        integer id PK
+        varchar email UK
+        varchar username UK
+        varchar hashed_password
+        varchar full_name
+        boolean is_active
+        boolean is_verified
+        integer age
+        double_precision height
+        double_precision weight
+        enum fitness_goal
+        enum experience_level
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    user_goals {
+        integer id PK
+        integer user_id FK
+        varchar goal_type
+        double_precision target_value
+        double_precision current_value
+        timestamp target_date
+        boolean is_achieved
+        timestamp created_at
+        timestamp achieved_at
+    }
+
+    user_stats {
+        integer id PK
+        integer user_id FK
+        timestamp date
+        double_precision weight
+        double_precision body_fat_percentage
+        double_precision muscle_mass
+        integer total_workouts
+        double_precision total_weight_lifted
+        double_precision total_cardio_distance
+        double_precision total_calories_burned
+        text personal_records
+    }
+
+    workouts {
+        integer id PK
+        integer user_id FK
+        varchar name
+        text description
+        timestamp scheduled_date
+        timestamp started_at
+        timestamp completed_at
+        enum status
+        integer total_duration
+        double_precision calories_burned
+        double_precision total_volume
+        double_precision total_distance
+        text notes
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    workout_exercises {
+        integer id PK
+        integer workout_id FK
+        integer exercise_id FK
+        integer order
+        integer sets
+        varchar reps
+        varchar weight
+        integer duration
+        double_precision distance
+        double_precision speed
+        double_precision incline
+        integer rest_time
+        varchar actual_reps
+        varchar actual_weight
+        text notes
+    }
+
+    exercises {
+        integer id PK
+        varchar name
+        text description
+        enum primary_muscle
+        varchar secondary_muscles
+        enum equipment
+        enum exercise_type
+        integer difficulty
+        text instructions
+        text tips
+        varchar video_url
+        boolean is_distance_based
+        boolean is_time_based
+        double_precision mets
+    }
+
+    friendships {
+        integer id PK
+        integer user_id FK
+        integer friend_id FK
+        boolean is_accepted
+        timestamp created_at
+        timestamp accepted_at
+    }
+
+    %% Relationships
+    users ||--o{ user_goals : "has"
+    users ||--o{ user_stats : "tracks"
+    users ||--o{ workouts : "creates"
+    users ||--o{ friendships : "initiates"
+    users ||--o{ friendships : "receives"
+    workouts ||--o{ workout_exercises : "contains"
+    exercises ||--o{ workout_exercises : "used_in"
+```
+
+### 📊 Database Statistics
+
+- **Total Tables**: 7
+- **Total Exercises**: 157
+- **Primary Muscle Groups**: 9 (LEGS, CORE, BACK, SHOULDERS, FULL_BODY, CHEST, TRICEPS, BICEPS, GLUTES)
+- **Equipment Types**: 8 (NONE, DUMBBELL, BARBELL, OTHER, CABLE, KETTLEBELL, MACHINE, BANDS)
+
+### 🔗 Key Relationships
+
+1. **User Management**: Users can have multiple goals, stats, and workouts
+2. **Workout Tracking**: Workouts contain multiple exercises with specific parameters
+3. **Social Features**: Users can form friendships with other users
+4. **Progress Tracking**: User stats track fitness progress over time
+5. **Exercise Library**: Comprehensive exercise database with detailed metadata
+
+### 🎯 Data Enums
+
+**Fitness Goals**: `strength`, `endurance`, `weight_loss`, `muscle_gain`, `general_fitness`
+**Experience Levels**: `beginner`, `intermediate`, `advanced`
+**Primary Muscles**: `LEGS`, `CORE`, `BACK`, `SHOULDERS`, `FULL_BODY`, `CHEST`, `TRICEPS`, `BICEPS`, `GLUTES`
+**Equipment**: `NONE`, `DUMBBELL`, `BARBELL`, `OTHER`, `CABLE`, `KETTLEBELL`, `MACHINE`, `BANDS`
+**Exercise Types**: `STRENGTH`, `CARDIO`, `FLEXIBILITY`, `BALANCE`
+**Workout Status**: `scheduled`, `in_progress`, `completed`, `cancelled`
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -26,7 +171,7 @@ The application is split into separate services:
    ```bash
    # If using direnv
    direnv allow
-   
+
    # Or manually source the file
    source .envrc
    ```

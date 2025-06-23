@@ -125,7 +125,7 @@
 
 ### **Mass/Hypertrophy (Full gym, 4-5 days, All levels)**
 **Day 1**: Chest + Triceps
-**Day 2**: Back + Biceps  
+**Day 2**: Back + Biceps
 **Day 3**: Legs + Glutes
 **Day 4**: Shoulders + Arms
 **Optional Day 5**: Weak points/lagging body parts
@@ -148,7 +148,7 @@
 
 1. **Start with goal** → determines rep ranges and training style
 2. **Assess experience** → determines complexity and volume
-3. **Match time availability** → determines split and frequency  
+3. **Match time availability** → determines split and frequency
 4. **Work with equipment** → determines exercise selection
 5. **Create progression plan** → ensures continued adaptation
 

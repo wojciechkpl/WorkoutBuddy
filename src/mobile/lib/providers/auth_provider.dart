@@ -1,5 +1,5 @@
 /// Provides authentication state and logic for the Pulse Fitness app.
-/// 
+///
 /// Handles login, registration, logout, and user profile loading.
 
 import 'package:flutter/foundation.dart';
@@ -52,10 +52,10 @@ class AuthProvider with ChangeNotifier {
       final response = await AuthService.login(username, password);
       _token = response['access_token'];
       await StorageService.saveToken(_token!);
-      
+
       await _loadUserProfile();
       _isAuthenticated = true;
-      
+
       return true;
     } catch (e) {
       print('Login error: $e');
@@ -112,4 +112,4 @@ class AuthProvider with ChangeNotifier {
       rethrow;
     }
   }
-} 
+}

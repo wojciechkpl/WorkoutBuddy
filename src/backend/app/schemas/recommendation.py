@@ -3,19 +3,24 @@
 Pydantic schemas for Recommendations
 """
 
+from typing import Optional
+
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict
+
 
 class WorkoutPlanRequest(BaseModel):
     """Schema for workout plan requests"""
+
     available_time: int = Field(..., ge=15, le=180)  # minutes
-    muscle_groups: Optional[List[str]] = None
-    equipment: Optional[List[str]] = None
+    muscle_groups: Optional[list[str]] = None
+    equipment: Optional[list[str]] = None
     workout_type: Optional[str] = None  # "strength", "cardio", "mixed"
     intensity: Optional[str] = Field("moderate", pattern="^(low|moderate|high)$")
 
+
 class ExerciseRecommendation(BaseModel):
     """Schema for exercise recommendations"""
+
     exercise_id: int
     exercise_name: str
     exercise_type: str
@@ -25,27 +30,33 @@ class ExerciseRecommendation(BaseModel):
     score: float
     reason: str
 
+
 class WorkoutPlanExercise(BaseModel):
     """Schema for exercises in workout plan"""
+
     exercise: ExerciseRecommendation
     sets: int
     reps: str
     rest_time: int
     notes: str
 
+
 class WorkoutPlanResponse(BaseModel):
     """Schema for workout plan responses"""
+
     name: str
     description: str
     estimated_duration: int
     estimated_calories: float
-    exercises: List[WorkoutPlanExercise]
+    exercises: list[WorkoutPlanExercise]
     ai_insights: Optional[str] = None
+
 
 class ProgressInsights(BaseModel):
     """Schema for progress insights"""
-    strength_progress: Dict[str, float]
-    muscle_balance: Dict[str, float]
+
+    strength_progress: dict[str, float]
+    muscle_balance: dict[str, float]
     workout_consistency: float
-    recommendations: List[str]
-    achievement_badges: List[str]
+    recommendations: list[str]
+    achievement_badges: list[str]

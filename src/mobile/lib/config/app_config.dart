@@ -3,7 +3,7 @@ class AppConfig {
   static const String apiBaseUrl = 'http://localhost:8000/api/v1';
   static const String appName = 'Pulse Fitness';
   static const String appVersion = '1.0.0';
-  
+
   // API endpoints
   static const String loginEndpoint = '/auth/login';
   static const String registerEndpoint = '/auth/register';
@@ -13,11 +13,11 @@ class AppConfig {
   static const String workoutsEndpoint = '/workouts';
   static const String recommendationsEndpoint = '/recommendations';
   static const String socialEndpoint = '/social';
-  
+
   // Timeouts
   static const int connectionTimeout = 10000; // 10 seconds
   static const int receiveTimeout = 10000; // 10 seconds
-  
+
   // Storage keys
   static const String tokenKey = 'auth_token';
   static const String userDataKey = 'user_data';

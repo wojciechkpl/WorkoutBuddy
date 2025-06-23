@@ -1,0 +1,55 @@
+# ML Service Configuration
+models:
+  user_similarity:
+    type: "cosine_similarity"
+    min_similarity_threshold: 0.3
+    max_recommendations: 10
+
+  exercise_recommender:
+    type: "collaborative_filtering"
+    algorithm: "matrix_factorization"
+    n_factors: 50
+    n_epochs: 20
+    learning_rate: 0.01
+    regularization: 0.1
+    min_interactions: 5
+    max_recommendations: 20
+
+  workout_generator:
+    type: "rule_based"
+    max_exercises_per_workout: 8
+    muscle_group_balance: true
+    difficulty_progression: true
+
+features:
+  user_features:
+    - "age"
+    - "fitness_goal"
+    - "experience_level"
+    - "preferred_equipment"
+    - "workout_frequency"
+
+  exercise_features:
+    - "muscle_group"
+    - "equipment"
+    - "difficulty"
+    - "exercise_type"
+    - "mets"
+
+  interaction_features:
+    - "rating"
+    - "completion_rate"
+    - "frequency"
+    - "last_performed"
+
+data_processing:
+  min_user_interactions: 3
+  min_exercise_interactions: 2
+  rating_scale: [1, 5]
+  normalize_features: true
+
+model_persistence:
+  save_path: "/app/models"
+  load_path: "/app/models"
+  auto_save: true
+  save_frequency: 1000  # iterations

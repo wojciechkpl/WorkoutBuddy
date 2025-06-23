@@ -30,24 +30,23 @@ Author: WorkoutBuddy Team
 Version: 2.1.0
 """
 
-import sys
-import os
 import asyncio
-from pathlib import Path
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import sys
 from datetime import datetime, timedelta
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
 
 # Add app to path for imports
 sys.path.append(str(Path(__file__).parent.parent.parent.parent / "ml_backend"))
 
 # Import WorkoutBuddy components
-from app.config import backend_config
+from app.ab_testing import ab_testing_service
 from app.ai_services import ai_service
 from app.analytics import analytics_service
-from app.ab_testing import ab_testing_service
+from app.config import backend_config
 
 # Configure visualization
 plt.style.use("seaborn-v0_8")
@@ -207,7 +206,7 @@ class WorkoutBuddyMLDemo:
                 print(f"   ❌ Challenge generation failed: {e}")
 
         # Show AI configuration being used
-        print(f"\n🔧 Current AI Configuration:")
+        print("\n🔧 Current AI Configuration:")
         print(f"   Model: {backend_config.ai.model_name}")
         print(f"   Temperature: {backend_config.ai.temperature}")
         print(f"   Max Tokens: {backend_config.ai.max_tokens}")
@@ -242,7 +241,7 @@ class WorkoutBuddyMLDemo:
         # Find top matches (excluding self)
         match_indices = np.argsort(user_similarities)[::-1][1:4]  # Top 3 matches
 
-        print(f"\n📊 Top 3 Community Matches:")
+        print("\n📊 Top 3 Community Matches:")
         for i, match_idx in enumerate(match_indices, 1):
             match_user = self.sample_users[match_idx]
             similarity_score = user_similarities[match_idx]
@@ -258,7 +257,7 @@ class WorkoutBuddyMLDemo:
         self._plot_similarity_analysis(similarity_matrix, target_user.name)
 
         # Show configuration influence
-        print(f"\n🔧 Matching Configuration:")
+        print("\n🔧 Matching Configuration:")
         print(f"   Algorithm: {backend_config.ml.similarity_algorithm}")
         print(f"   Feature Weights: {backend_config.ml.feature_weights}")
         print(
@@ -369,7 +368,7 @@ class WorkoutBuddyMLDemo:
         # Analyze user engagement patterns
         engagement_analysis = self._analyze_engagement(events_data)
 
-        print(f"📈 Engagement Analysis:")
+        print("📈 Engagement Analysis:")
         print(f"   Total Events: {len(events_data)}")
         print(f"   Active Users: {engagement_analysis['active_users']}")
         print(f"   Avg. Sessions per User: {engagement_analysis['avg_sessions']:.1f}")
@@ -380,14 +379,14 @@ class WorkoutBuddyMLDemo:
         # Demonstrate cohort analysis
         cohort_data = self._simulate_cohort_analysis()
 
-        print(f"\n📊 Cohort Analysis (30-day window):")
+        print("\n📊 Cohort Analysis (30-day window):")
         for cohort in cohort_data:
             print(f"   Week {cohort['week']}: {cohort['retention_rate']:.1%} retention")
             print(f"      Goal completion: {cohort['goal_completion']:.1%}")
             print(f"      Avg engagement: {cohort['avg_engagement']:.2f}")
 
         # Show analytics configuration
-        print(f"\n🔧 Analytics Configuration:")
+        print("\n🔧 Analytics Configuration:")
         print(
             f"   Service: {'PostHog' if analytics_service.enabled else 'Local tracking'}"
         )
@@ -478,7 +477,7 @@ class WorkoutBuddyMLDemo:
             print(f"     Variants: {len(exp.variants)}")
 
             # Show user assignments for demo users
-            print(f"     User Assignments:")
+            print("     User Assignments:")
             for user in self.sample_users[:3]:
                 variant = ab_testing_service.get_user_variant(
                     str(user.id), exp.experiment_id
@@ -486,7 +485,7 @@ class WorkoutBuddyMLDemo:
                 print(f"       {user.name}: {variant}")
 
         # Simulate experiment results
-        print(f"\n📊 Simulated Experiment Results:")
+        print("\n📊 Simulated Experiment Results:")
         sample_results = self._simulate_experiment_results()
 
         for variant, results in sample_results.items():
@@ -496,7 +495,7 @@ class WorkoutBuddyMLDemo:
             print(f"     Confidence: {results['confidence']:.1%}")
 
         # Show configuration
-        print(f"\n🔧 A/B Testing Configuration:")
+        print("\n🔧 A/B Testing Configuration:")
         print(
             f"   Default Allocation: {backend_config.ab_testing.default_traffic_allocation}"
         )

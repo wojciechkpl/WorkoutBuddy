@@ -2,20 +2,19 @@
 Database configuration for ML Service
 """
 
+import logging
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
 from app.config import settings
-import logging
 
 logger = logging.getLogger(__name__)
 
 # Create database engine
 engine = create_engine(
-    settings.DATABASE_URL,
-    pool_pre_ping=True,
-    pool_recycle=300,
-    echo=False
+    settings.DATABASE_URL, pool_pre_ping=True, pool_recycle=300, echo=False
 )
 
 # Create session factory
@@ -24,6 +23,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Create base class for models
 Base = declarative_base()
 
+
 def get_db():
     """Dependency to get database session"""
     db = SessionLocal()
@@ -31,6 +31,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 def init_db():
     """Initialize database connection"""
@@ -41,4 +42,4 @@ def init_db():
         logger.info("Database connection established successfully")
     except Exception as e:
         logger.error(f"Error connecting to database: {e}")
-        raise 
+        raise

@@ -38,10 +38,10 @@ class Workout {
       name: json['name'],
       description: json['description'] ?? '',
       status: json['status'] ?? 'planned',
-      startedAt: json['started_at'] != null 
+      startedAt: json['started_at'] != null
           ? DateTime.parse(json['started_at'])
           : null,
-      completedAt: json['completed_at'] != null 
+      completedAt: json['completed_at'] != null
           ? DateTime.parse(json['completed_at'])
           : null,
       totalDuration: json['total_duration'],

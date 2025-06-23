@@ -1,5 +1,5 @@
 /// Entry point for the Pulse Fitness Flutter app.
-/// 
+///
 /// Sets up providers and determines whether to show the login or home screen.
 
 // mobile/lib/main.dart
@@ -20,7 +20,7 @@ void main() async {
 }
 
 /// The root widget for the Pulse Fitness app.
-/// 
+///
 /// Provides authentication, workout, and social state to the widget tree.
 class PulseFitnessApp extends StatelessWidget {
   const PulseFitnessApp({Key? key}) : super(key: key);

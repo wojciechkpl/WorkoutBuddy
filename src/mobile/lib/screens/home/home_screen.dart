@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadInitialData() async {
     final workoutProvider = Provider.of<WorkoutProvider>(context, listen: false);
     final socialProvider = Provider.of<SocialProvider>(context, listen: false);
-    
+
     await Future.wait([
       workoutProvider.loadWorkouts(),
       workoutProvider.loadExercises(),
@@ -168,4 +168,4 @@ class ProfileTab extends StatelessWidget {
       ),
     );
   }
-} 
+}

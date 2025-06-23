@@ -3,11 +3,14 @@
 Exercise model for exercise database
 """
 
-from sqlalchemy import Column, Integer, String, Text, Enum, Float,Boolean
-from sqlalchemy.orm import relationship
 import enum
 import json
+
+from sqlalchemy import Boolean, Column, Enum, Float, Integer, String, Text
+from sqlalchemy.orm import relationship
+
 from app.database import Base
+
 
 class MuscleGroup(enum.Enum):
     CHEST = "chest"
@@ -21,6 +24,7 @@ class MuscleGroup(enum.Enum):
     CARDIO = "cardio"
     FULL_BODY = "full_body"
 
+
 class Equipment(enum.Enum):
     NONE = "none"
     BARBELL = "barbell"
@@ -33,6 +37,7 @@ class Equipment(enum.Enum):
     CARDIO_MACHINE = "cardio_machine"
     OTHER = "other"
 
+
 class ExerciseType(enum.Enum):
     STRENGTH = "strength"
     CARDIO = "cardio"
@@ -40,10 +45,12 @@ class ExerciseType(enum.Enum):
     BALANCE = "balance"
     PLYOMETRIC = "plyometric"
 
+
 class Exercise(Base):
     """Exercise model with detailed information"""
+
     __tablename__ = "exercises"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False, index=True)
     description = Column(Text)
@@ -55,14 +62,14 @@ class Exercise(Base):
     instructions = Column(Text)
     tips = Column(Text)
     video_url = Column(String)
-    
+
     # For cardio exercises
     is_distance_based = Column(Boolean, default=False)
     is_time_based = Column(Boolean, default=False)
-    
+
     # METs (Metabolic Equivalent of Task) for calorie calculation
     mets = Column(Float, default=4.0)
-    
+
     # Relationships
     workout_exercises = relationship("WorkoutExercise", back_populates="exercise")
 

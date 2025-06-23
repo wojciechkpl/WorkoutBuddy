@@ -53,7 +53,7 @@ class WorkoutProvider with ChangeNotifier {
 
       final newWorkout = await ApiService.createWorkout(workout);
       _workouts.add(newWorkout);
-      
+
       return true;
     } catch (e) {
       print('Error creating workout: $e');
@@ -74,7 +74,7 @@ class WorkoutProvider with ChangeNotifier {
       if (index != -1) {
         _workouts[index] = updatedWorkout;
       }
-      
+
       return true;
     } catch (e) {
       print('Error updating workout: $e');
@@ -108,4 +108,4 @@ class WorkoutProvider with ChangeNotifier {
       return null;
     }
   }
-} 
+}

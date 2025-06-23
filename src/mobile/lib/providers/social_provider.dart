@@ -1,5 +1,5 @@
 /// Provides social/friend state and logic for the Pulse Fitness app.
-/// 
+///
 /// Handles loading friends, friend requests, and sending/accepting/rejecting requests.
 
 import 'package:flutter/foundation.dart';
@@ -72,11 +72,11 @@ class SocialProvider with ChangeNotifier {
       notifyListeners();
 
       await ApiService.acceptFriendRequest(friendshipId);
-      
+
       // Remove from requests and add to friends
       _friendRequests.removeWhere((request) => request['id'] == friendshipId);
       await loadFriends(); // Refresh friends list
-      
+
       return true;
     } catch (e) {
       print('Error accepting friend request: $e');
@@ -94,10 +94,10 @@ class SocialProvider with ChangeNotifier {
       notifyListeners();
 
       await ApiService.rejectFriendRequest(friendshipId);
-      
+
       // Remove from requests
       _friendRequests.removeWhere((request) => request['id'] == friendshipId);
-      
+
       return true;
     } catch (e) {
       print('Error rejecting friend request: $e');
@@ -107,4 +107,4 @@ class SocialProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-} 
+}

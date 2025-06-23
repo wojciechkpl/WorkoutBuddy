@@ -68,14 +68,14 @@ class StorageService {
     final prefs = await SharedPreferences.getInstance();
     final keys = prefs.getKeys();
     final settings = <String, dynamic>{};
-    
+
     for (final key in keys) {
       if (key.startsWith(_settingsKey)) {
         final settingKey = key.substring(_settingsKey.length + 1);
         settings[settingKey] = prefs.get(key);
       }
     }
-    
+
     return settings;
   }
 
