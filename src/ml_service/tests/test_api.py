@@ -160,9 +160,10 @@ def test_get_similar_users_ml_service_not_ready(client):
 def test_train_models_success(client):
     """Test successful model training"""
     # Mock ML models
-    with patch("app.api.user_similarity_model") as mock_similarity, patch(
-        "app.api.exercise_recommender"
-    ) as mock_recommender:
+    with (
+        patch("app.api.user_similarity_model") as mock_similarity,
+        patch("app.api.exercise_recommender") as mock_recommender,
+    ):
         response = client.post("/models/train")
 
         assert response.status_code == status.HTTP_200_OK
@@ -177,8 +178,9 @@ def test_train_models_success(client):
 def test_train_models_ml_service_not_ready(client):
     """Test model training when ML service is not ready"""
     # Mock ML models to be None
-    with patch("app.api.user_similarity_model", None), patch(
-        "app.api.exercise_recommender", None
+    with (
+        patch("app.api.user_similarity_model", None),
+        patch("app.api.exercise_recommender", None),
     ):
         response = client.post("/models/train")
 

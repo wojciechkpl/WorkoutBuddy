@@ -1,0 +1,121 @@
+"""
+Core module for Pulse Fitness
+Contains dependency injection container, configuration management, and service registration
+"""
+
+from .container import (
+    ServiceContainer,
+    ServiceProvider,
+    ServiceLifetime,
+    get_container,
+    configure_services,
+    create_scope,
+)
+
+from .config import (
+    ConfigurationManager,
+    Environment,
+    DatabaseConfig,
+    RedisConfig,
+    SecurityConfig,
+    MLConfig,
+    ExternalServicesConfig,
+    FeatureFlags,
+    LoggingConfig,
+    MonitoringConfig,
+    get_config,
+    get_database_config,
+    get_redis_config,
+    get_security_config,
+    get_ml_config,
+    get_external_services_config,
+    get_logging_config,
+    get_monitoring_config,
+    get_feature_flags,
+    is_feature_enabled,
+)
+
+from .service_registration import (
+    IUserRepository,
+    IChallengeRepository,
+    IAuthService,
+    IChallengeService,
+    IRecommendationService,
+    IEmbeddingService,
+    IEmailService,
+    IStorageService,
+    ICacheManager,
+    INotificationService,
+    ISafetyService,
+    RepositoryFactory,
+    MLServiceFactory,
+    ExternalServiceFactory,
+    register_all_services,
+    register_service,
+)
+
+from .bootstrap import (
+    ApplicationBootstrap,
+    DependencyInjectionMiddleware,
+    PerformanceMonitoringMiddleware,
+    RateLimitMiddleware,
+    get_bootstrap,
+    create_app,
+    create_test_app,
+)
+
+__all__ = [
+    # Container
+    "ServiceContainer",
+    "ServiceProvider",
+    "ServiceLifetime",
+    "get_container",
+    "configure_services",
+    "create_scope",
+    # Configuration
+    "ConfigurationManager",
+    "Environment",
+    "DatabaseConfig",
+    "RedisConfig",
+    "SecurityConfig",
+    "MLConfig",
+    "ExternalServicesConfig",
+    "FeatureFlags",
+    "LoggingConfig",
+    "MonitoringConfig",
+    "get_config",
+    "get_database_config",
+    "get_redis_config",
+    "get_security_config",
+    "get_ml_config",
+    "get_external_services_config",
+    "get_logging_config",
+    "get_monitoring_config",
+    "get_feature_flags",
+    "is_feature_enabled",
+    # Service Registration
+    "IUserRepository",
+    "IChallengeRepository",
+    "IAuthService",
+    "IChallengeService",
+    "IRecommendationService",
+    "IEmbeddingService",
+    "IEmailService",
+    "IStorageService",
+    "ICacheManager",
+    "INotificationService",
+    "ISafetyService",
+    "RepositoryFactory",
+    "MLServiceFactory",
+    "ExternalServiceFactory",
+    "register_all_services",
+    "register_service",
+    # Bootstrap
+    "ApplicationBootstrap",
+    "DependencyInjectionMiddleware",
+    "PerformanceMonitoringMiddleware",
+    "RateLimitMiddleware",
+    "get_bootstrap",
+    "create_app",
+    "create_test_app",
+]

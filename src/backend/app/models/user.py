@@ -94,6 +94,7 @@ class User(Base):
         back_populates="friend",
         cascade="all, delete-orphan",
     )
+    created_challenges = relationship("Challenge", back_populates="creator")
 
     def get_height_cm(self) -> float:
         """Get height in centimeters (metric)"""

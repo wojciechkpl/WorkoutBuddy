@@ -30,9 +30,9 @@ class DataService:
                 "height": user.height,
                 "weight": user.weight,
                 "fitness_goal": user.fitness_goal.value if user.fitness_goal else None,
-                "experience_level": user.experience_level.value
-                if user.experience_level
-                else None,
+                "experience_level": (
+                    user.experience_level.value if user.experience_level else None
+                ),
                 "created_at": user.created_at.isoformat() if user.created_at else None,
             }
             users_data.append(user_data)
@@ -48,13 +48,13 @@ class DataService:
             exercise_data = {
                 "id": exercise.id,
                 "name": exercise.name,
-                "primary_muscle": exercise.primary_muscle.value
-                if exercise.primary_muscle
-                else None,
+                "primary_muscle": (
+                    exercise.primary_muscle.value if exercise.primary_muscle else None
+                ),
                 "equipment": exercise.equipment.value if exercise.equipment else None,
-                "exercise_type": exercise.exercise_type.value
-                if exercise.exercise_type
-                else None,
+                "exercise_type": (
+                    exercise.exercise_type.value if exercise.exercise_type else None
+                ),
                 "difficulty": exercise.difficulty,
                 "mets": exercise.mets,
             }
@@ -83,9 +83,9 @@ class DataService:
                 "exercise_id": we.exercise_id,
                 "rating": rating,
                 "workout_id": workout.id,
-                "completed_at": workout.completed_at.isoformat()
-                if workout.completed_at
-                else None,
+                "completed_at": (
+                    workout.completed_at.isoformat() if workout.completed_at else None
+                ),
             }
             interactions.append(interaction)
 

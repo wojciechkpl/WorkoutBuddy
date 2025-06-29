@@ -12,8 +12,9 @@ from app.database import get_db
 from app.models import Exercise, User
 from app.services.data_service import DataService
 from app.services.ml_client import ml_client
+from app.api.auth import get_current_user
 
-router = APIRouter(prefix="/recommendations", tags=["recommendations"])
+router = APIRouter()
 
 
 @router.get("/exercises/{user_id}")
@@ -55,12 +56,14 @@ async def get_exercise_recommendations(
                     {
                         "exercise_id": exercise_id,
                         "name": exercise.name,
-                        "primary_muscle": exercise.primary_muscle.value
-                        if exercise.primary_muscle
-                        else None,
-                        "equipment": exercise.equipment.value
-                        if exercise.equipment
-                        else None,
+                        "primary_muscle": (
+                            exercise.primary_muscle.value
+                            if exercise.primary_muscle
+                            else None
+                        ),
+                        "equipment": (
+                            exercise.equipment.value if exercise.equipment else None
+                        ),
                         "difficulty": exercise.difficulty,
                         "predicted_rating": rec["predicted_rating"],
                     }
@@ -118,12 +121,16 @@ async def get_similar_users(
                     {
                         "user_id": similar_user_id,
                         "username": similar_user.username,
-                        "fitness_goal": similar_user.fitness_goal.value
-                        if similar_user.fitness_goal
-                        else None,
-                        "experience_level": similar_user.experience_level.value
-                        if similar_user.experience_level
-                        else None,
+                        "fitness_goal": (
+                            similar_user.fitness_goal.value
+                            if similar_user.fitness_goal
+                            else None
+                        ),
+                        "experience_level": (
+                            similar_user.experience_level.value
+                            if similar_user.experience_level
+                            else None
+                        ),
                         "similarity_score": user_info["similarity_score"],
                     }
                 )
@@ -197,3 +204,31 @@ async def load_ml_models() -> dict[str, str]:
         return {"message": "Models loaded successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error loading models: {e!s}")
+
+
+@router.get("/onboarding")
+def get_onboarding_recommendations(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Stub: Get personalized recommendations for onboarding"""
+    return {
+        "message": "Personalized recommendations",
+        "recommendations": [
+            "Complete your first workout",
+            "Join a fitness community",
+            "Set up accountability partnerships"
+        ],
+        "challenges": [
+            {"id": 1, "name": "7-Day Starter Challenge", "description": "Complete a workout every day for a week."},
+            {"id": 2, "name": "Community Joiner", "description": "Join your first community group."}
+        ],
+        "communities": [
+            {"id": 1, "name": "Beginners United", "description": "A welcoming group for new members."},
+            {"id": 2, "name": "Strength Seekers", "description": "For those focused on strength training."}
+        ],
+        "friends_suggestions": [
+            {"id": 1, "username": "fit_jane", "mutual_friends": 3},
+            {"id": 2, "username": "workout_mike", "mutual_friends": 2}
+        ]
+    }

@@ -1,0 +1,45 @@
+# Feature Flags Configuration for Pulse Fitness
+# Controls which features are enabled/disabled
+
+# Core Features
+enable_ml_recommendations: true
+enable_social_features: true
+enable_safety_moderation: true
+
+# Communication Features
+enable_push_notifications: true
+enable_email_notifications: true
+enable_sms_notifications: false
+
+# File and Media Features
+enable_file_upload: true
+enable_image_processing: true
+enable_video_upload: false
+
+# Analytics and Monitoring
+enable_analytics: true
+enable_debug_mode: false
+enable_performance_monitoring: true
+
+# Advanced Features
+enable_ai_coaching: true
+enable_voice_commands: false
+enable_ar_workouts: false
+
+# Social Features
+enable_friend_system: true
+enable_challenges: true
+enable_leaderboards: true
+enable_group_workouts: true
+
+# Safety Features
+enable_content_moderation: true
+enable_user_verification: true
+enable_reporting_system: true
+enable_blocking_system: true
+
+# Premium Features
+enable_premium_workouts: true
+enable_personal_training: false
+enable_nutrition_tracking: true
+enable_advanced_analytics: true 

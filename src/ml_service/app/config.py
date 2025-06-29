@@ -15,9 +15,9 @@ class Settings(BaseSettings):
     SERVICE_VERSION: str = "1.0.0"
 
     # Database
-    DATABASE_URL: Optional[
-        str
-    ] = None  # "postgresql://wojciechkowalinski@localhost/workoutbuddy"
+    DATABASE_URL: Optional[str] = (
+        None  # "postgresql://wojciechkowalinski@localhost/workoutbuddy"
+    )
 
     # Redis
     REDIS_URL: str = "redis://redis:6379"

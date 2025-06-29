@@ -1,6 +1,6 @@
-# Database Documentation
+# Database Documentation (2024)
 
-This document provides detailed information about the WorkoutBuddy database schema, relationships, and usage patterns.
+This document provides detailed information about the WorkoutBuddy database schema, including new tables for safety, privacy, ML feedback, accountability check-ins, and community connections. Synthetic test data covers all flows and is annotated for separation.
 
 ## 📋 Table Overview
 
@@ -13,6 +13,14 @@ This document provides detailed information about the WorkoutBuddy database sche
 | `workout_exercises` | Exercises within workouts | 0+ | Exercise parameters, performance tracking |
 | `exercises` | Exercise library | 157 | Comprehensive exercise database |
 | `friendships` | Social connections | 0+ | User relationships, social features |
+| `safety_reports` | User safety reports | 0+ | Report generation, user safety monitoring |
+| `user_blocks` | User block list | 0+ | Blocked user list, user safety feature |
+| `privacy_settings` | User privacy preferences | 0+ | User privacy settings, data protection |
+| `ml_feedback` | User feedback on ML recommendations | 0+ | Feedback on ML-generated recommendations |
+| `accountability_checkins` | Accountability check-ins | 0+ | Check-ins for accountability, progress tracking |
+| `community_groups` | Community groups | 0+ | Group creation, community management |
+| `community_memberships` | Group memberships | 0+ | Membership in community groups |
+| `community_connections` | Community connections | 0+ | Connections between users in community groups |
 
 ## 🗂️ Detailed Table Schemas
 
@@ -209,6 +217,151 @@ CREATE TABLE friendships (
 - Acceptance tracking
 - Prevents self-friendship
 
+### Safety Reports Table
+
+**Purpose**: Store user safety reports
+
+```sql
+CREATE TABLE safety_reports (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    report_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    report_type VARCHAR NOT NULL, -- e.g., 'incident', 'safety_concern'
+    description TEXT,
+    status USER_DEFINED DEFAULT 'pending', -- enum
+    resolved_at TIMESTAMP
+);
+```
+
+**Status Values**:
+- `pending` - Report is awaiting review
+- `resolved` - Report has been reviewed and resolved
+
+### User Blocks Table
+
+**Purpose**: Store user block list
+
+```sql
+CREATE TABLE user_blocks (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    blocked_user_id INTEGER NOT NULL REFERENCES users(id),
+    blocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CHECK (user_id != blocked_user_id)
+);
+```
+
+**Features**:
+- Bidirectional blocking
+- Prevents self-blocking
+
+### Privacy Settings Table
+
+**Purpose**: Store user privacy preferences
+
+```sql
+CREATE TABLE privacy_settings (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    privacy_level USER_DEFINED NOT NULL, -- enum
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**Privacy Levels**:
+- `public` - User's data is visible to everyone
+- `private` - User's data is only visible to friends
+- `custom` - User's data is visible to a custom set of users
+
+### ML Feedback Table
+
+**Purpose**: Store user feedback on ML recommendations
+
+```sql
+CREATE TABLE ml_feedback (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    feedback_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    feedback_type VARCHAR NOT NULL, -- e.g., 'like', 'dislike', 'suggestion'
+    description TEXT,
+    status USER_DEFINED DEFAULT 'pending', -- enum
+    resolved_at TIMESTAMP
+);
+```
+
+**Status Values**:
+- `pending` - Feedback is awaiting review
+- `resolved` - Feedback has been reviewed and resolved
+
+### Accountability Check-ins Table
+
+**Purpose**: Track user accountability check-ins
+
+```sql
+CREATE TABLE accountability_checkins (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    checkin_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status USER_DEFINED DEFAULT 'pending', -- enum
+    notes TEXT
+);
+```
+
+**Status Values**:
+- `pending` - Check-in is awaiting completion
+- `completed` - Check-in has been completed
+
+### Community Groups Table
+
+**Purpose**: Store community groups
+
+```sql
+CREATE TABLE community_groups (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Community Memberships Table
+
+**Purpose**: Store group memberships
+
+```sql
+CREATE TABLE community_memberships (
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER NOT NULL REFERENCES community_groups(id),
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CHECK (group_id != user_id)
+);
+```
+
+**Features**:
+- Bidirectional membership
+- Prevents self-membership
+
+### Community Connections Table
+
+**Purpose**: Store community connections
+
+```sql
+CREATE TABLE community_connections (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    connection_id INTEGER NOT NULL REFERENCES users(id),
+    connection_type USER_DEFINED NOT NULL, -- enum
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CHECK (user_id != connection_id)
+);
+```
+
+**Features**:
+- Bidirectional connection
+- Prevents self-connection
+
 ## 🔗 Relationships and Constraints
 
 ### Foreign Key Relationships
@@ -234,11 +387,41 @@ CREATE TABLE friendships (
 7. **friendships.friend_id** → **users.id**
    - Cascade delete: When user is deleted, their friendships are deleted
 
+8. **safety_reports.user_id** → **users.id**
+   - Cascade delete: When user is deleted, their safety reports are deleted
+
+9. **user_blocks.user_id** → **users.id**
+   - Cascade delete: When user is deleted, their block list is deleted
+
+10. **privacy_settings.user_id** → **users.id**
+    - Cascade delete: When user is deleted, their privacy settings are deleted
+
+11. **ml_feedback.user_id** → **users.id**
+    - Cascade delete: When user is deleted, their ML feedback is deleted
+
+12. **accountability_checkins.user_id** → **users.id**
+    - Cascade delete: When user is deleted, their check-ins are deleted
+
+13. **community_memberships.user_id** → **users.id**
+    - Cascade delete: When user is deleted, their memberships are deleted
+
+14. **community_connections.user_id** → **users.id**
+    - Cascade delete: When user is deleted, their connections are deleted
+
+15. **community_connections.connection_id** → **users.id**
+    - Cascade delete: When user is deleted, their connections are deleted
+
 ### Unique Constraints
 
 - `users.email` - Unique email addresses
 - `users.username` - Unique usernames
 - `friendships(user_id, friend_id)` - Unique friendship pairs
+- `safety_reports(user_id, report_date)` - Unique report per user per date
+- `user_blocks(user_id, blocked_user_id)` - Unique block per user per blocked user
+- `privacy_settings(user_id)` - Unique privacy settings per user
+- `ml_feedback(user_id, feedback_date)` - Unique feedback per user per date
+- `community_memberships(group_id, user_id)` - Unique membership per group per user
+- `community_connections(user_id, connection_id)` - Unique connection per user per connection
 
 ## 📊 Data Distribution
 
@@ -340,6 +523,28 @@ CREATE INDEX idx_user_stats_user_date ON user_stats(user_id, date);
 
 -- Friendship queries
 CREATE INDEX idx_friendships_users ON friendships(user_id, friend_id);
+
+-- Safety reports
+CREATE INDEX idx_safety_reports_user_date ON safety_reports(user_id, report_date);
+
+-- User blocks
+CREATE INDEX idx_user_blocks_user_blocked ON user_blocks(user_id, blocked_user_id);
+
+-- Privacy settings
+CREATE INDEX idx_privacy_settings_user ON privacy_settings(user_id);
+
+-- ML feedback
+CREATE INDEX idx_ml_feedback_user_date ON ml_feedback(user_id, feedback_date);
+
+-- Community groups
+CREATE INDEX idx_community_groups_name ON community_groups(name);
+
+-- Community memberships
+CREATE INDEX idx_community_memberships_group ON community_memberships(group_id);
+
+-- Community connections
+CREATE INDEX idx_community_connections_user ON community_connections(user_id);
+CREATE INDEX idx_community_connections_connection ON community_connections(connection_id);
 ```
 
 ### Maintenance
@@ -381,3 +586,7 @@ WHERE completed_at IS NOT NULL AND started_at IS NOT NULL;
 3. **Row Level Security**: Consider implementing RLS for multi-tenant scenarios
 4. **Data Encryption**: Encrypt sensitive user data at rest
 5. **Audit Logging**: Log all data modifications for compliance
+
+## Test Data Note
+
+Synthetic test data is annotated with 'test' for easy separation and cleanup.

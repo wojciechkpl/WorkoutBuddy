@@ -4,10 +4,8 @@ Friendship model for social features
 """
 
 from datetime import datetime
-
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, UniqueConstraint
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, UniqueConstraint, String
 from sqlalchemy.orm import relationship
-
 from app.database import Base
 
 
@@ -22,6 +20,7 @@ class Friendship(Base):
     is_accepted = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     accepted_at = Column(DateTime)
+    status = Column(String, default="pending")  # New field for friendship status
 
     # Relationships
     user = relationship(

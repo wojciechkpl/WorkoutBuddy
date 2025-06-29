@@ -1,17 +1,97 @@
-# Pulse Fitness - Microservices Architecture
+# Pulse Fitness - Modular Microservices Architecture (2024)
 
-A modern fitness application built with a microservices architecture using Docker containers.
+A modern fitness application built with a modular, microservices architecture using Docker containers and integrated ML services.
 
-## 🏗️ Architecture Overview
+---
 
-The application is split into separate services:
+## 🏗️ Modular Architecture Overview
 
-- **Backend API** (FastAPI) - Main business logic and API endpoints
-- **ML Service** (FastAPI) - Machine learning recommendations and analytics
-- **Frontend** (Flutter Web) - User interface
-- **Database** (PostgreSQL) - Data persistence
-- **Redis** - Caching and session storage
-- **Nginx** - Reverse proxy and load balancer
+- **Backend API** (FastAPI, src/backend): Core business logic, user/social/workout/safety endpoints, DI, config, and monitoring
+- **ML Service** (FastAPI, src/ml_service): ML recommendations, moderation, analytics, stateless, versioned
+- **Mobile/Web** (Flutter, src/mobile): User interface, multiplatform, Dockerized for web
+- **Database** (PostgreSQL): Data persistence, metric/imperial support, test data separation
+- **Redis**: Caching, session storage
+- **Nginx** (optional): Reverse proxy, load balancer
+
+---
+
+## 🐳 Docker & Compose Usage
+
+- All services are containerized and orchestrated via `docker-compose.yml`
+- **Build & Run (dev/prod):**
+  ```bash
+  # Start all services
+  docker-compose up --build -d
+  # Stop all
+  docker-compose down
+  ```
+- **Healthchecks:** All containers expose `/health` endpoints and are checked by Docker Compose
+- **Volumes:** Data (Postgres, Redis) and ML models are persisted via named volumes
+- **Environment:** All config/secrets via env vars (see `.envrc`)
+
+---
+
+## 🧩 Service Boundaries & Extensibility
+
+- **Backend**: Modular DI, config, and service registration. Add new services in `app/services/`, register in DI.
+- **ML Service**: Add new models or endpoints in `ml_service/app/`.
+- **Mobile**: Add new screens/providers in `mobile/lib/`.
+- **Infra**: Add new containers/services in `docker-compose.yml`.
+
+---
+
+## 🩺 Healthchecks & Monitoring
+- All services expose `/health` endpoints
+- Docker Compose and K8s configs use these for orchestration
+- Monitoring hooks in backend for ML, DB, and cache health
+
+---
+
+## 🧪 Testing & Synthetic Data
+- Full test suite: `pytest -v` (see `src/backend/tests/`)
+- Synthetic test data covers all user journey flows, including safety, privacy, ML feedback, accountability, and community
+- Test data is separated by annotation for easy cleanup
+
+---
+
+## 🛠️ Troubleshooting
+- **ModuleNotFoundError: No module named 'app'**: Ensure you use the correct working directory and PYTHONPATH in Docker/Compose. The backend expects `/app` as the root in the container.
+- **Port conflicts**: Make sure ports 8000 (backend), 8001 (ML), 5432 (db), 6379 (redis) are free or adjust in `docker-compose.yml`.
+- **Database migrations**: Use Alembic or manual SQL for schema changes. See `src/backend/alembic/`.
+
+---
+
+## 📂 Project Structure (2024)
+
+```
+project-root/
+  backend/              # FastAPI backend
+    app/
+      api/              # API endpoints
+      core/             # DI, config, bootstrap
+      models/           # SQLAlchemy models
+      repositories/     # Data access
+      schemas/          # Pydantic schemas
+      services/         # Business logic, ML, external
+      utils/            # Utilities
+    tests/              # Unit/integration tests
+    Dockerfile
+  ml_service/           # ML microservice
+    app/
+    models/
+    data/
+    Dockerfile
+  mobile/               # Flutter app
+    lib/
+    Dockerfile
+  docs/                 # Architecture, DB, user journey, units
+  docker-compose.yml
+  ...
+```
+
+---
+
+## For more, see `/docs` for detailed architecture, DB, and user journey diagrams.
 
 ## 🗄️ Database Schema
 

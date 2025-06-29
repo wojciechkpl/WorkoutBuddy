@@ -7,7 +7,6 @@ in the user's preferred units.
 """
 
 
-
 class UnitConverter:
     """Utility class for unit conversions"""
 

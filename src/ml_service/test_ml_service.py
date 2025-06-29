@@ -2,7 +2,6 @@
 Test script for the new stateless ML service
 """
 
-
 import requests
 
 # Test data

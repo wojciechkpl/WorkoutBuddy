@@ -1,8 +1,8 @@
-# WorkoutBuddy User Journey Diagram
+# WorkoutBuddy User Journey Diagram (2024)
 
 ## Overview
 
-This document illustrates the complete user journey through the WorkoutBuddy application, showing how users interact with the dual unit system, ML features, and core functionality.
+This document illustrates the complete user journey through the WorkoutBuddy application, including new flows for safety, privacy, ML feedback, accountability, and community. All flows are covered by synthetic test data and integration tests.
 
 ## Complete User Journey
 
@@ -31,12 +31,24 @@ journey
       Share achievements: 3: User
       Join challenges: 3: User
       Compare progress: 3: User
+    section Safety & Privacy
+      Block/report user: 3: User
+      Adjust privacy settings: 3: User
+      Verify account: 2: User
+    section Accountability & Community
+      Join community group: 3: User
+      Log accountability check-in: 3: User
+      Give feedback on ML: 2: User
     section Advanced Features
       Analyze performance: 3: User
       Adjust goals: 3: User
       Get personalized insights: 4: User
       Update preferences: 2: User
 ```
+
+## Test Coverage Note
+
+All flows above are covered by synthetic test data and integration tests. Test data is annotated for easy separation and cleanup.
 
 ## Detailed User Journey Flow
 

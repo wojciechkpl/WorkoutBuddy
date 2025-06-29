@@ -44,9 +44,9 @@ class RecommendationEngine:
                 "id": ex.id,
                 "name": ex.name,
                 "description": ex.description,
-                "primary_muscle": ex.primary_muscle.value
-                if ex.primary_muscle
-                else None,
+                "primary_muscle": (
+                    ex.primary_muscle.value if ex.primary_muscle else None
+                ),
                 "equipment": ex.equipment.value if ex.equipment else None,
                 "difficulty": ex.difficulty,
                 "score": 0.5,  # Default score

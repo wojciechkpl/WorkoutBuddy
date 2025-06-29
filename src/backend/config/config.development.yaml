@@ -1,0 +1,67 @@
+# Development Configuration for Pulse Fitness
+# Overrides base configuration for development environment
+
+# Application Settings
+app:
+  name: "Pulse Fitness"
+  debug: true
+  host: "0.0.0.0"
+  port: 8000
+
+# Database Configuration
+database:
+  url: "sqlite:///./pulse_fitness_dev.db"
+  echo: true  # Enable SQL logging for development
+  migration_auto: true
+
+# Redis Configuration
+redis:
+  url: "redis://localhost:6379/1"  # Use different DB for development
+  host: "localhost"
+  port: 6379
+  db: 1
+
+# Security Configuration
+security:
+  access_token_expire_minutes: 60  # Longer tokens for development
+  refresh_token_expire_days: 30
+  rate_limit_requests: 1000  # Higher limits for development
+  cors_origins: ["http://localhost:3000", "http://localhost:8080", "*"]
+
+# Machine Learning Configuration
+ml:
+  vector_db_url: null  # Use mock client in development
+  model_cache_dir: "./models/dev"
+  enable_mock_services: true
+
+# External Services Configuration
+external:
+  email_service_url: null  # Use mock email service
+  push_notification_url: null  # Use mock notification service
+  file_storage_url: null  # Use local file storage
+  sms_service_url: null  # Use mock SMS service
+
+# Logging Configuration
+logging:
+  level: "DEBUG"
+  enable_console: true
+  enable_file: false
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Monitoring Configuration
+monitoring:
+  enable_health_checks: true
+  enable_metrics: true
+  enable_tracing: true  # Enable tracing in development
+  performance_monitoring: true
+
+# Feature Flags
+features:
+  enable_ml_recommendations: true
+  enable_social_features: true
+  enable_safety_moderation: true
+  enable_push_notifications: false  # Disable in development
+  enable_email_notifications: false  # Disable in development
+  enable_file_upload: true
+  enable_analytics: false  # Disable analytics in development
+  enable_debug_mode: true 

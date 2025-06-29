@@ -26,8 +26,8 @@ class WorkoutExerciseBase(BaseModel):
     incline: Optional[float] = None  # percentage
     rest_time: Optional[int] = None  # in seconds
     notes: Optional[str] = None
-    weight_unit: Optional[str] = Field(None, regex="^(KG|LBS)$")
-    distance_unit: Optional[str] = Field(None, regex="^(KM|MILES|METERS)$")
+    weight_unit: Optional[str] = Field(None, pattern="^(KG|LBS)$")
+    distance_unit: Optional[str] = Field(None, pattern="^(KM|MILES|METERS)$")
 
     @validator("weight")
     def validate_weight(cls, v, values):

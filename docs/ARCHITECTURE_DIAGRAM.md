@@ -1,96 +1,65 @@
-# WorkoutBuddy Architecture & Dependencies Diagram
+# WorkoutBuddy Architecture & Dependencies Diagram (2024)
 
 ## Overview
 
-This document provides a holistic view of the WorkoutBuddy application architecture, showing the relationships between different components, services, and the dual unit system implementation.
+This document provides a holistic view of the WorkoutBuddy application architecture, showing the relationships between modular services, Docker containers, and new flows (safety, privacy, ML feedback, accountability, community).
 
 ## System Architecture
 
 ```mermaid
 graph TB
-    %% External Users
-    User[👤 User] --> Mobile[Mobile App]
+    User["👤 User"] --> Mobile[Mobile App]
     User --> Web[Web Interface]
-
-    %% Frontend Layer
-    subgraph "Frontend Layer"
-        Mobile --> MobileAPI[Mobile API Client]
-        Web --> WebAPI[Web API Client]
-    end
-
-    %% API Gateway Layer
+    Mobile --> MobileAPI[Mobile API Client]
+    Web --> WebAPI[Web API Client]
     subgraph "API Gateway Layer"
         Nginx[Nginx Reverse Proxy]
         MobileAPI --> Nginx
         WebAPI --> Nginx
     end
-
-    %% Backend Services
-    subgraph "Backend Services"
-        subgraph "Main Backend (FastAPI)"
-            MainAPI[Main API Server]
-            AuthService[Authentication Service]
-            UserService[User Management Service]
-            WorkoutService[Workout Service]
-            ExerciseService[Exercise Service]
-            StatsService[Statistics Service]
-        end
-
-        subgraph "ML Service (FastAPI)"
-            MLAPI[ML API Server]
-            UserSimilarityModel[User Similarity Model]
-            ExerciseRecommender[Exercise Recommender]
-            AIServices[AI Services]
-        end
+    subgraph "Backend Services (Docker: backend)"
+        MainAPI[Main API Server]
+        AuthService[Authentication]
+        UserService[User Management]
+        WorkoutService[Workout]
+        ExerciseService[Exercise]
+        StatsService[Statistics]
+        SafetyService[Safety/Moderation]
+        PrivacyService[Privacy]
+        MLFeedbackService[ML Feedback]
+        AccountabilityService[Accountability]
+        CommunityService[Community]
     end
-
-    %% Database Layer
-    subgraph "Database Layer"
-        PostgreSQL[(PostgreSQL Database)]
-
-        subgraph "Database Views"
-            UsersMetric[users_metric View]
-            UserStatsMetric[user_stats_metric View]
-            WorkoutExercisesMetric[workout_exercises_metric View]
-        end
-
-        subgraph "Unit Conversion Functions"
-            LbsToKg[lbs_to_kg()]
-            KgToLbs[kg_to_lbs()]
-            InchesToCm[inches_to_cm()]
-            CmToInches[cm_to_inches()]
-            MilesToKm[miles_to_km()]
-            KmToMiles[km_to_miles()]
-        end
+    subgraph "ML Service (Docker: ml-service)"
+        MLAPI[ML API Server]
+        UserSimilarityModel[User Similarity]
+        ExerciseRecommender[Exercise Recommender]
+        ModerationModel[Moderation]
     end
-
-    %% Data Flow
+    subgraph "Infra"
+        PostgreSQL[(PostgreSQL DB)]
+        Redis[(Redis Cache)]
+    end
     Nginx --> MainAPI
     Nginx --> MLAPI
-
-    MainAPI --> AuthService
-    MainAPI --> UserService
-    MainAPI --> WorkoutService
-    MainAPI --> ExerciseService
-    MainAPI --> StatsService
-
-    MLAPI --> UserSimilarityModel
-    MLAPI --> ExerciseRecommender
-    MLAPI --> AIServices
-
-    %% Database Connections
     MainAPI --> PostgreSQL
+    MainAPI --> Redis
     MLAPI --> PostgreSQL
-
-    %% Unit System Integration
-    UserService --> UnitConverter[Unit Conversion Utils]
-    WorkoutService --> UnitConverter
-    StatsService --> UnitConverter
-
-    UserSimilarityModel --> UsersMetric
-    UserSimilarityModel --> UserStatsMetric
-    ExerciseRecommender --> WorkoutExercisesMetric
+    MainAPI --> SafetyService
+    MainAPI --> PrivacyService
+    MainAPI --> MLFeedbackService
+    MainAPI --> AccountabilityService
+    MainAPI --> CommunityService
+    MainAPI --> MLAPI
 ```
+
+## Docker/Container Orchestration
+
+- All services are defined in `docker-compose.yml`
+- Each service runs in its own container
+- Healthchecks and dependencies are managed by Compose
+- Volumes for persistent data and ML models
+- Network isolation via `pulse_network`
 
 ## Component Dependencies
 

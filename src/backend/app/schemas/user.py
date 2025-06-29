@@ -37,9 +37,9 @@ class UserUpdate(BaseModel):
     weight: Optional[float] = Field(
         None, gt=0
     )  # Stored in user's preferred weight_unit
-    unit_system: Optional[str] = Field(None, regex="^(METRIC|IMPERIAL)$")
-    height_unit: Optional[str] = Field(None, regex="^(CM|INCHES|FEET_INCHES)$")
-    weight_unit: Optional[str] = Field(None, regex="^(KG|LBS)$")
+    unit_system: Optional[str] = Field(None, pattern="^(METRIC|IMPERIAL)$")
+    height_unit: Optional[str] = Field(None, pattern="^(CM|INCHES|FEET_INCHES)$")
+    weight_unit: Optional[str] = Field(None, pattern="^(KG|LBS)$")
 
     @validator("height")
     def validate_height(cls, v, values):
@@ -163,9 +163,9 @@ class UserStatsMetricResponse(BaseModel):
 class UnitPreferences(BaseModel):
     """Schema for user unit preferences"""
 
-    unit_system: str = Field(..., regex="^(METRIC|IMPERIAL)$")
-    height_unit: str = Field(..., regex="^(CM|INCHES|FEET_INCHES)$")
-    weight_unit: str = Field(..., regex="^(KG|LBS)$")
+    unit_system: str = Field(..., pattern="^(METRIC|IMPERIAL)$")
+    height_unit: str = Field(..., pattern="^(CM|INCHES|FEET_INCHES)$")
+    weight_unit: str = Field(..., pattern="^(KG|LBS)$")
 
     @validator("height_unit")
     def validate_height_unit(cls, v, values):

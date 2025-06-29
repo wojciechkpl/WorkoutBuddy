@@ -407,15 +407,21 @@ def create_user_workouts(conn, user_id, fitness_goal, experience_level):
                     else random.uniform(2.0, 20.0)
                 ),
                 "duration": random.randint(30, 120),
-                "distance": random.uniform(100, 1000)
-                if fitness_goal in ["ENDURANCE", "CARDIO"]
-                else None,
-                "speed": random.uniform(5.0, 15.0)
-                if fitness_goal in ["ENDURANCE", "CARDIO"]
-                else None,
-                "incline": random.uniform(0, 10)
-                if fitness_goal in ["ENDURANCE", "CARDIO"]
-                else None,
+                "distance": (
+                    random.uniform(100, 1000)
+                    if fitness_goal in ["ENDURANCE", "CARDIO"]
+                    else None
+                ),
+                "speed": (
+                    random.uniform(5.0, 15.0)
+                    if fitness_goal in ["ENDURANCE", "CARDIO"]
+                    else None
+                ),
+                "incline": (
+                    random.uniform(0, 10)
+                    if fitness_goal in ["ENDURANCE", "CARDIO"]
+                    else None
+                ),
                 "rest_time": random.randint(30, 180),
                 "actual_reps": str(random.randint(6, 12)),
                 "actual_weight": str(

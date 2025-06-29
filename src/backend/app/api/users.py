@@ -98,3 +98,33 @@ async def search_users(
     )
 
     return users
+
+
+@router.post("/fitness-assessment")
+def complete_fitness_assessment(
+    assessment_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Stub: Complete fitness assessment for onboarding"""
+    return {"message": "Fitness assessment completed"}
+
+
+@router.post("/privacy-setup")
+def privacy_setup(
+    privacy_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Stub: Set privacy preferences for onboarding"""
+    return {"message": "Privacy preferences set"}
+
+
+@router.post("/goals")
+def set_user_goals(
+    goals_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Stub: Set user goals for onboarding"""
+    return {"message": "User goals set"}

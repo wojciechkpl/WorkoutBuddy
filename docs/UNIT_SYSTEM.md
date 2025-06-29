@@ -1,8 +1,8 @@
-# WorkoutBuddy Unit System Documentation
+# WorkoutBuddy Unit System Documentation (2024)
 
 ## Overview
 
-WorkoutBuddy supports both metric and imperial units while ensuring all downstream algorithms use metric units internally for consistency and accuracy. This document explains the implementation details and usage patterns.
+WorkoutBuddy supports both metric and imperial units across all models and flows, including new tables for safety, privacy, ML feedback, accountability, and community. All downstream algorithms and ML models use metric units internally for consistency and accuracy.
 
 ## Architecture
 
@@ -366,3 +366,7 @@ This will:
 3. **Unit conversion caching**: For performance
 4. **Custom unit preferences**: Per measurement type
 5. **Unit conversion history**: Track changes over time
+
+## Test Coverage
+
+- All unit system features are covered by integration and synthetic data tests.

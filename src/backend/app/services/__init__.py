@@ -6,10 +6,12 @@ Services package initialization
 from app.services.exercise_analyzer import ExerciseAnalyzer
 from app.services.recommendation_engine import RecommendationEngine
 from app.services.workout_service import WorkoutService, import_exercise_database
+from app.services.challenge_service import ChallengeService
 
 __all__ = [
     "RecommendationEngine",
     "WorkoutService",
     "import_exercise_database",
     "ExerciseAnalyzer",
+    "ChallengeService",
 ]
