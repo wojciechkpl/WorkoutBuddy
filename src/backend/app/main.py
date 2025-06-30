@@ -121,8 +121,12 @@ app.include_router(challenges.router, prefix="/api/v1/challenges", tags=["Challe
 app.include_router(safety.router, prefix="/api/v1/safety", tags=["Safety"])
 app.include_router(privacy.router, prefix="/api/v1/privacy", tags=["Privacy"])
 app.include_router(community.router, prefix="/api/v1/community", tags=["Community"])
-app.include_router(accountability.router, prefix="/api/v1/accountability", tags=["Accountability"])
-app.include_router(subscriptions.router, prefix="/api/v1/subscriptions", tags=["Subscriptions"])
+app.include_router(
+    accountability.router, prefix="/api/v1/accountability", tags=["Accountability"]
+)
+app.include_router(
+    subscriptions.router, prefix="/api/v1/subscriptions", tags=["Subscriptions"]
+)
 
 
 @app.get("/")

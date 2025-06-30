@@ -64,7 +64,7 @@ def create_test_user(
     experience_level: str = "INTERMEDIATE",
     unit_system: str = "METRIC",
     height_unit: str = "CM",
-    weight_unit: str = "KG"
+    weight_unit: str = "KG",
 ) -> User:
     """Create a test user in the database"""
     user = User(
@@ -81,7 +81,7 @@ def create_test_user(
         height_unit=height_unit,
         weight_unit=weight_unit,
         is_active=True,
-        is_verified=True
+        is_verified=True,
     )
     db_session.add(user)
     db_session.commit()
@@ -94,12 +94,9 @@ def get_test_token(user):
     security = get_security_config()
     access_token_expires = timedelta(minutes=security.access_token_expire_minutes)
     access_token = jwt.encode(
-        claims={
-            "sub": user.username,
-            "exp": datetime.utcnow() + access_token_expires
-        },
+        claims={"sub": user.username, "exp": datetime.utcnow() + access_token_expires},
         key=security.secret_key,
-        algorithm=security.algorithm
+        algorithm=security.algorithm,
     )
     return access_token
 

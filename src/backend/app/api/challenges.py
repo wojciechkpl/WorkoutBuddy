@@ -18,11 +18,15 @@ from app.database import get_db
 def get_challenge_service() -> ChallengeService:
     # Provide dummy dependencies for testing
     class DummyRepo:
-        async def get_user_challenges(self, user_id): return []
+        async def get_user_challenges(self, user_id):
+            return []
+
     class DummyML:
         pass
+
     class DummyNotif:
         pass
+
     return ChallengeService(DummyRepo(), DummyML(), DummyNotif())
 
 
@@ -60,7 +64,7 @@ async def get_personalized_challenges(
                 "id": 1,
                 "title": "30-Day Strength Challenge",
                 "description": "Build strength in 30 days",
-                "difficulty": "intermediate"
+                "difficulty": "intermediate",
             }
         ]
     }

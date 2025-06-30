@@ -463,7 +463,9 @@ def register_transient_services(container: ServiceContainer):
 
     container.register_transient(
         IChallengeService,
-        factory=lambda challenge_repo, ml_service, notification_service: create_challenge_service(
+        factory=lambda challenge_repo,
+        ml_service,
+        notification_service: create_challenge_service(
             challenge_repo, ml_service, notification_service
         ),
     )

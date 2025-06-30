@@ -173,7 +173,20 @@ class ApplicationBootstrap:
             raise RuntimeError("FastAPI app not initialized")
 
         # Import and register route modules
-        from app.api import auth, users, challenges, social, workouts, exercises, accountability, subscriptions, community, privacy, safety, recommendations
+        from app.api import (
+            auth,
+            users,
+            challenges,
+            social,
+            workouts,
+            exercises,
+            accountability,
+            subscriptions,
+            community,
+            privacy,
+            safety,
+            recommendations,
+        )
 
         # Register route modules
         self.app.include_router(
@@ -199,14 +212,12 @@ class ApplicationBootstrap:
         self.app.include_router(
             community.router, prefix="/communities", tags=["Communities"]
         )
+        self.app.include_router(privacy.router, prefix="/privacy", tags=["Privacy"])
+        self.app.include_router(safety.router, prefix="/safety", tags=["Safety"])
         self.app.include_router(
-            privacy.router, prefix="/privacy", tags=["Privacy"]
-        )
-        self.app.include_router(
-            safety.router, prefix="/safety", tags=["Safety"]
-        )
-        self.app.include_router(
-            recommendations.router, prefix="/api/v1/recommendations", tags=["Recommendations"]
+            recommendations.router,
+            prefix="/api/v1/recommendations",
+            tags=["Recommendations"],
         )
 
         # Health check endpoint

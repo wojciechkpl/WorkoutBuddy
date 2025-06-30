@@ -4,6 +4,7 @@ from app.models.user import User
 
 router = APIRouter()
 
+
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_community(
     community_data: dict,
@@ -17,8 +18,9 @@ def create_community(
         "description": community_data.get("description", ""),
         "created_by": current_user.id,
         "category": community_data.get("category", "strength"),
-        "privacy_level": community_data.get("privacy_level", "public")
+        "privacy_level": community_data.get("privacy_level", "public"),
     }
+
 
 @router.post("/{community_id}/join")
 def join_community(
@@ -28,6 +30,7 @@ def join_community(
     """Join a community"""
     # Stub implementation
     return {"status": "joined"}
+
 
 @router.get("/recommendations")
 def get_community_recommendations(
@@ -40,13 +43,11 @@ def get_community_recommendations(
             "id": 1,
             "name": "Strength Training Community",
             "description": "For strength enthusiasts",
-            "match_score": 0.85
+            "match_score": 0.85,
         }
     ]
-    return {
-        "recommendations": communities,
-        "communities": communities
-    }
+    return {"recommendations": communities, "communities": communities}
+
 
 @router.get("/matching")
 def community_matching_algorithm(
@@ -56,13 +57,10 @@ def community_matching_algorithm(
     # Stub implementation
     return {
         "matches": [
-            {
-                "community_id": 1,
-                "match_score": 0.85,
-                "reason": "Similar fitness goals"
-            }
+            {"community_id": 1, "match_score": 0.85, "reason": "Similar fitness goals"}
         ]
     }
+
 
 @router.get("/{community_id}/challenges")
 def get_community_challenges(
@@ -76,7 +74,7 @@ def get_community_challenges(
                 "id": 1,
                 "title": "Community Strength Challenge",
                 "description": "A challenge for all community members",
-                "difficulty": "all-levels"
+                "difficulty": "all-levels",
             }
         ]
-    } 
+    }

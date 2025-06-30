@@ -28,28 +28,30 @@ from tests.conftest import create_test_user, get_test_token
 class TestFriendInvitationSystem:
     """Test the enhanced friend invitation system"""
 
-    def test_send_friend_invitation_email(self, client: TestClient, db_session: Session):
+    def test_send_friend_invitation_email(
+        self, client: TestClient, db_session: Session
+    ):
         """Test sending friend invitation via email"""
         # Create test users
         user1 = create_test_user(db_session, "inviter@test.com", "inviter")
         user2 = create_test_user(db_session, "invitee@test.com", "invitee")
-        
+
         token = get_test_token(user1)
         print(f"Generated token: {token}")
-        
+
         response = client.post(
             "/api/v1/social/invitations/send",
             headers={"Authorization": f"Bearer {token}"},
             json={
                 "invitee_email": "friend@example.com",
                 "invitation_type": "email",
-                "personalized_message": "Join me on FitTribe! Let's crush our fitness goals together 💪"
-            }
+                "personalized_message": "Join me on FitTribe! Let's crush our fitness goals together 💪",
+            },
         )
-        
+
         print(f"Response status: {response.status_code}")
         print(f"Response body: {response.text}")
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "invitation_code" in data
@@ -60,17 +62,17 @@ class TestFriendInvitationSystem:
         """Test sending friend invitation via SMS"""
         user = create_test_user(db_session, "inviter@test.com", "inviter")
         token = get_test_token(user)
-        
+
         response = client.post(
             "/api/v1/social/invitations/send",
             headers={"Authorization": f"Bearer {token}"},
             json={
                 "invitee_phone": "+1234567890",
                 "invitation_type": "sms",
-                "personalized_message": "Hey! Join me on FitTribe for amazing workouts!"
-            }
+                "personalized_message": "Hey! Join me on FitTribe for amazing workouts!",
+            },
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert data["invitation_type"] == "sms"
@@ -80,22 +82,28 @@ class TestFriendInvitationSystem:
         # Create invitation in database
         user1 = create_test_user(db_session, "inviter@test.com", "inviter")
         user2 = create_test_user(db_session, "invitee@test.com", "invitee")
-        
+
         # Create invitation
         invitation_code = "test_invitation_123"
         db_session.execute(
-            text("INSERT INTO friend_invitations (inviter_id, invitee_email, invitation_code, invitation_type, status) VALUES (:inviter_id, :email, :code, 'email', 'pending')"),
-            {"inviter_id": user1.id, "email": "invitee@test.com", "code": invitation_code}
+            text(
+                "INSERT INTO friend_invitations (inviter_id, invitee_email, invitation_code, invitation_type, status) VALUES (:inviter_id, :email, :code, 'email', 'pending')"
+            ),
+            {
+                "inviter_id": user1.id,
+                "email": "invitee@test.com",
+                "code": invitation_code,
+            },
         )
         db_session.commit()
-        
+
         token = get_test_token(user2)
-        
+
         response = client.post(
             f"/api/v1/social/invitations/accept/{invitation_code}",
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "accepted"
@@ -104,12 +112,12 @@ class TestFriendInvitationSystem:
         """Test getting invitation status dashboard"""
         user = create_test_user(db_session, "inviter@test.com", "inviter")
         token = get_test_token(user)
-        
+
         response = client.get(
             "/api/v1/social/invitations/status",
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "invitations" in data
@@ -119,19 +127,19 @@ class TestFriendInvitationSystem:
         """Test contact import functionality"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         contacts = [
             {"name": "John Doe", "email": "john@example.com"},
             {"name": "Jane Smith", "phone": "+1234567890"},
-            {"name": "Bob Wilson", "email": "bob@example.com", "phone": "+0987654321"}
+            {"name": "Bob Wilson", "email": "bob@example.com", "phone": "+0987654321"},
         ]
-        
+
         response = client.post(
             "/api/v1/social/invitations/import-contacts",
             headers={"Authorization": f"Bearer {token}"},
-            json={"contacts": contacts}
+            json={"contacts": contacts},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "existing_users" in data
@@ -145,21 +153,21 @@ class TestCommunityManagement:
         """Test creating a new community"""
         user = create_test_user(db_session, "creator@test.com", "creator")
         token = get_test_token(user)
-        
+
         community_data = {
             "name": "Test Community",
             "description": "A test community for fitness enthusiasts",
             "category": "strength",
             "privacy_level": "public",
-            "max_members": 100
+            "max_members": 100,
         }
-        
+
         response = client.post(
             "/api/v1/community/",
             headers={"Authorization": f"Bearer {token}"},
-            json=community_data
+            json=community_data,
         )
-        
+
         assert response.status_code == 201
         data = response.json()
         assert data["name"] == "Test Community"
@@ -169,53 +177,56 @@ class TestCommunityManagement:
         """Test joining a community"""
         user = create_test_user(db_session, "user@test.com", "user")
         community = db_session.query(CommunityGroup).first()
-        
+
         if not community:
             # Create a test community
             community = CommunityGroup(
                 name="Test Community",
                 description="Test description",
                 category="strength",
-                privacy_level="public"
+                privacy_level="public",
             )
             db_session.add(community)
             db_session.commit()
-        
+
         token = get_test_token(user)
-        
+
         response = client.post(
             f"/api/v1/community/{community.id}/join",
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "joined"
 
-    def test_get_community_recommendations(self, client: TestClient, db_session: Session):
+    def test_get_community_recommendations(
+        self, client: TestClient, db_session: Session
+    ):
         """Test getting personalized community recommendations"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         response = client.get(
             "/api/v1/community/recommendations",
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "recommendations" in data
 
-    def test_community_matching_algorithm(self, client: TestClient, db_session: Session):
+    def test_community_matching_algorithm(
+        self, client: TestClient, db_session: Session
+    ):
         """Test the community matching algorithm"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         response = client.get(
-            "/api/v1/community/matching",
-            headers={"Authorization": f"Bearer {token}"}
+            "/api/v1/community/matching", headers={"Authorization": f"Bearer {token}"}
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "matches" in data
@@ -228,28 +239,19 @@ class TestPrivacyControls:
         """Test setting privacy controls"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         privacy_settings = {
-            "profile_visibility": {
-                "target_group": "friends",
-                "is_enabled": True
-            },
-            "workout_sharing": {
-                "target_group": "community",
-                "is_enabled": True
-            },
-            "location_sharing": {
-                "target_group": "friends",
-                "is_enabled": False
-            }
+            "profile_visibility": {"target_group": "friends", "is_enabled": True},
+            "workout_sharing": {"target_group": "community", "is_enabled": True},
+            "location_sharing": {"target_group": "friends", "is_enabled": False},
         }
-        
+
         response = client.post(
             "/api/v1/privacy/controls",
             headers={"Authorization": f"Bearer {token}"},
-            json=privacy_settings
+            json=privacy_settings,
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
@@ -258,12 +260,11 @@ class TestPrivacyControls:
         """Test getting privacy controls"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         response = client.get(
-            "/api/v1/privacy/controls",
-            headers={"Authorization": f"Bearer {token}"}
+            "/api/v1/privacy/controls", headers={"Authorization": f"Bearer {token}"}
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "profile_visibility" in data
@@ -272,17 +273,14 @@ class TestPrivacyControls:
         """Test account type management"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         # Test changing account type
         response = client.post(
             "/api/v1/privacy/account-type",
             headers={"Authorization": f"Bearer {token}"},
-            json={
-                "account_type": "private",
-                "discoverability_level": "friends_only"
-            }
+            json={"account_type": "private", "discoverability_level": "friends_only"},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
@@ -296,17 +294,17 @@ class TestSafetyAndModeration:
         user1 = create_test_user(db_session, "user1@test.com", "user1")
         user2 = create_test_user(db_session, "user2@test.com", "user2")
         token = get_test_token(user1)
-        
+
         response = client.post(
             "/api/v1/safety/block",
             headers={"Authorization": f"Bearer {token}"},
             json={
                 "blocked_user_id": user2.id,
                 "block_reason": "inappropriate_behavior",
-                "block_type": "user"
-            }
+                "block_type": "user",
+            },
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
@@ -315,20 +313,20 @@ class TestSafetyAndModeration:
         """Test reporting content"""
         user = create_test_user(db_session, "reporter@test.com", "reporter")
         token = get_test_token(user)
-        
+
         report_data = {
             "reported_content_type": "post",
             "reported_content_id": 1,
             "report_reason": "inappropriate_content",
-            "report_details": "This post contains inappropriate language"
+            "report_details": "This post contains inappropriate language",
         }
-        
+
         response = client.post(
             "/api/v1/safety/report",
             headers={"Authorization": f"Bearer {token}"},
-            json=report_data
+            json=report_data,
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
@@ -337,12 +335,11 @@ class TestSafetyAndModeration:
         """Test getting safety status and statistics"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         response = client.get(
-            "/api/v1/safety/status",
-            headers={"Authorization": f"Bearer {token}"}
+            "/api/v1/safety/status", headers={"Authorization": f"Bearer {token}"}
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "blocked_users" in data
@@ -355,12 +352,12 @@ class TestChallengeSystem:
         """Test getting personalized challenges"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         response = client.get(
             "/api/v1/challenges/personalized",
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "challenges" in data
@@ -369,12 +366,12 @@ class TestChallengeSystem:
         """Test joining a challenge"""
         user = create_test_user(db_session, "user@test.com", "user")
         challenge = db_session.query(Challenge).first()
-        
+
         if not challenge:
             # Create a test challenge
             from datetime import datetime, timedelta
             from app.schemas.challenge import ChallengeType, ChallengeStatus
-            
+
             challenge = Challenge(
                 title="Test Challenge",
                 description="Test challenge description",
@@ -383,18 +380,18 @@ class TestChallengeSystem:
                 target_unit="reps",
                 start_date=datetime.utcnow(),
                 end_date=datetime.utcnow() + timedelta(days=30),
-                created_by=user.id
+                created_by=user.id,
             )
             db_session.add(challenge)
             db_session.commit()
-        
+
         token = get_test_token(user)
-        
+
         response = client.post(
             f"/api/v1/challenges/{challenge.id}/join",
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
@@ -403,11 +400,11 @@ class TestChallengeSystem:
         """Test updating challenge progress"""
         user = create_test_user(db_session, "user@test.com", "user")
         challenge = db_session.query(Challenge).first()
-        
+
         if not challenge:
             from datetime import datetime, timedelta
             from app.schemas.challenge import ChallengeType, ChallengeStatus
-            
+
             challenge = Challenge(
                 title="Test Challenge",
                 description="Test challenge description",
@@ -416,19 +413,19 @@ class TestChallengeSystem:
                 target_unit="reps",
                 start_date=datetime.utcnow(),
                 end_date=datetime.utcnow() + timedelta(days=30),
-                created_by=user.id
+                created_by=user.id,
             )
             db_session.add(challenge)
             db_session.commit()
-        
+
         token = get_test_token(user)
-        
+
         response = client.put(
             f"/api/v1/challenges/{challenge.id}/progress",
             headers={"Authorization": f"Bearer {token}"},
-            json={"progress_percentage": 75.0}
+            json={"progress_percentage": 75.0},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
@@ -437,26 +434,28 @@ class TestChallengeSystem:
 class TestAccountabilitySystem:
     """Test accountability partnership system"""
 
-    def test_create_accountability_partnership(self, client: TestClient, db_session: Session):
+    def test_create_accountability_partnership(
+        self, client: TestClient, db_session: Session
+    ):
         """Test creating an accountability partnership"""
         user1 = create_test_user(db_session, "user1@test.com", "user1")
         user2 = create_test_user(db_session, "user2@test.com", "user2")
         token = get_test_token(user1)
-        
+
         partnership_data = {
             "partner_id": user2.id,
             "partnership_type": "workout_partner",
             "goal_compatibility_score": 0.85,
             "schedule_compatibility_score": 0.90,
-            "personality_compatibility_score": 0.88
+            "personality_compatibility_score": 0.88,
         }
-        
+
         response = client.post(
             "/api/v1/accountability/partnerships",
             headers={"Authorization": f"Bearer {token}"},
-            json=partnership_data
+            json=partnership_data,
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
@@ -465,34 +464,36 @@ class TestAccountabilitySystem:
         """Test getting accountability partners"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         response = client.get(
             "/api/v1/accountability/partners",
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "partners" in data
 
-    def test_create_accountability_checkin(self, client: TestClient, db_session: Session):
+    def test_create_accountability_checkin(
+        self, client: TestClient, db_session: Session
+    ):
         """Test creating an accountability check-in"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         checkin_data = {
             "checkin_type": "workout",
             "status": "completed",
             "notes": "Great workout today!",
-            "shared_with_partner": True
+            "shared_with_partner": True,
         }
-        
+
         response = client.post(
             "/api/v1/accountability/checkins",
             headers={"Authorization": f"Bearer {token}"},
-            json=checkin_data
+            json=checkin_data,
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
@@ -505,12 +506,12 @@ class TestPremiumFeatures:
         """Test getting premium features for a user"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         response = client.get(
             "/api/v1/subscriptions/features",
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "features" in data
@@ -519,18 +520,18 @@ class TestPremiumFeatures:
         """Test upgrading to premium subscription"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         upgrade_data = {
             "subscription_type": "premium",
-            "payment_method": "test_payment"
+            "payment_method": "test_payment",
         }
-        
+
         response = client.post(
             "/api/v1/subscriptions/upgrade",
             headers={"Authorization": f"Bearer {token}"},
-            json=upgrade_data
+            json=upgrade_data,
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
@@ -546,66 +547,69 @@ class TestIntegrationScenarios:
             "email": "newuser@test.com",
             "username": "newuser",
             "full_name": "New User",
-            "password": "testpassword123"
+            "password": "testpassword123",
         }
-        
+
         response = client.post("/api/v1/auth/register", json=user_data)
         assert response.status_code == 201
         # Step 2: Login to get access token
-        login_data = {"username": user_data["username"], "password": user_data["password"]}
+        login_data = {
+            "username": user_data["username"],
+            "password": user_data["password"],
+        }
         response = client.post("/api/v1/auth/login", data=login_data)
         assert response.status_code == 200
         token = response.json()["access_token"]
-        
+
         # Step 3: Complete fitness assessment
         assessment_data = {
             "fitness_level": "beginner",
             "primary_goals": ["strength"],
             "time_commitment": "30min",
             "preferred_workout_types": ["strength_training"],
-            "preferred_times": ["morning"]
+            "preferred_times": ["morning"],
         }
-        
+
         response = client.post(
             "/api/v1/users/fitness-assessment",
             headers={"Authorization": f"Bearer {token}"},
-            json=assessment_data
+            json=assessment_data,
         )
         assert response.status_code == 200
-        
+
         # Step 4: Set privacy preferences
         privacy_data = {
             "account_type": "public",
             "discoverability_level": "all",
             "social_comfort_level": "medium",
-            "location_sharing_enabled": True
+            "location_sharing_enabled": True,
         }
-        
+
         response = client.post(
             "/api/v1/users/privacy-setup",
             headers={"Authorization": f"Bearer {token}"},
-            json=privacy_data
+            json=privacy_data,
         )
         assert response.status_code == 200
-        
+
         # Step 5: Set goals
         goal_data = {
             "primary_goal": "strength",
             "timeline": "3_months",
-            "milestones": ["Complete first workout", "Join a community"]
+            "milestones": ["Complete first workout", "Join a community"],
         }
-        
+
         response = client.post(
             "/api/v1/users/goals",
             headers={"Authorization": f"Bearer {token}"},
-            json=goal_data
+            json=goal_data,
         )
         assert response.status_code == 200
-        
+
         # Step 6: Get personalized recommendations
         response = client.get(
             "/api/v1/recommendations/onboarding",
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 200
         data = response.json()
@@ -618,70 +622,71 @@ class TestIntegrationScenarios:
         # Create two users
         user1 = create_test_user(db_session, "inviter@test.com", "inviter")
         user2 = create_test_user(db_session, "invitee@test.com", "invitee")
-        
+
         token1 = get_test_token(user1)
         token2 = get_test_token(user2)
-        
+
         # Step 1: Send invitation
         invitation_data = {
             "invitee_email": "invitee@test.com",
             "invitation_type": "email",
-            "personalized_message": "Join me on FitTribe!"
+            "personalized_message": "Join me on FitTribe!",
         }
-        
+
         response = client.post(
             "/api/v1/social/invitations/send",
             headers={"Authorization": f"Bearer {token1}"},
-            json=invitation_data
+            json=invitation_data,
         )
         assert response.status_code == 200
-        
+
         invitation_code = response.json()["invitation_code"]
-        
+
         # Step 2: Accept invitation
         response = client.post(
             f"/api/v1/social/invitations/accept/{invitation_code}",
-            headers={"Authorization": f"Bearer {token2}"}
+            headers={"Authorization": f"Bearer {token2}"},
         )
         assert response.status_code == 200
-        
+
         # Step 3: Verify friendship created
         response = client.get(
-            "/api/v1/social/friends",
-            headers={"Authorization": f"Bearer {token1}"}
+            "/api/v1/social/friends", headers={"Authorization": f"Bearer {token1}"}
         )
         assert response.status_code == 200
         friends = response.json()
         assert len(friends) == 1
         assert friends[0]["username"] == "invitee"
 
-    def test_community_matching_and_joining(self, client: TestClient, db_session: Session):
+    def test_community_matching_and_joining(
+        self, client: TestClient, db_session: Session
+    ):
         """Test community matching and joining workflow"""
         user = create_test_user(db_session, "user@test.com", "user")
         token = get_test_token(user)
-        
+
         # Step 1: Get community recommendations
         response = client.get(
             "/api/v1/community/recommendations",
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 200
-        
+
         communities = response.json()["communities"]
         if communities:
             community_id = communities[0]["id"]
-            
+
             # Step 2: Join community
             response = client.post(
                 f"/api/v1/community/{community_id}/join",
-                headers={"Authorization": f"Bearer {token}"}
+                headers={"Authorization": f"Bearer {token}"},
             )
             assert response.status_code == 200
-            
+
             # Step 3: Get community challenges
             response = client.get(
                 f"/api/v1/community/{community_id}/challenges",
-                headers={"Authorization": f"Bearer {token}"}
+                headers={"Authorization": f"Bearer {token}"},
             )
             assert response.status_code == 200
 
@@ -690,41 +695,40 @@ class TestIntegrationScenarios:
         user1 = create_test_user(db_session, "reporter@test.com", "reporter")
         user2 = create_test_user(db_session, "reported@test.com", "reported")
         token = get_test_token(user1)
-        
+
         # Step 1: Report user
         report_data = {
             "reported_user_id": user2.id,
             "report_reason": "harassment",
-            "report_details": "Received unwanted messages"
+            "report_details": "Received unwanted messages",
         }
-        
+
         response = client.post(
             "/api/v1/safety/report",
             headers={"Authorization": f"Bearer {token}"},
-            json=report_data
+            json=report_data,
         )
         assert response.status_code == 200
-        
+
         # Step 2: Block user
         block_data = {
             "blocked_user_id": user2.id,
             "block_reason": "harassment",
-            "block_type": "user"
+            "block_type": "user",
         }
-        
+
         response = client.post(
             "/api/v1/safety/block",
             headers={"Authorization": f"Bearer {token}"},
-            json=block_data
+            json=block_data,
         )
         assert response.status_code == 200
-        
+
         # Step 3: Verify user is blocked
         response = client.get(
-            "/api/v1/safety/status",
-            headers={"Authorization": f"Bearer {token}"}
+            "/api/v1/safety/status", headers={"Authorization": f"Bearer {token}"}
         )
         assert response.status_code == 200
         blocked_users = response.json()["blocked_users"]
         assert len(blocked_users) == 1
-        assert blocked_users[0]["user_id"] == user2.id 
+        assert blocked_users[0]["user_id"] == user2.id

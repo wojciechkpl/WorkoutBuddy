@@ -194,10 +194,15 @@ async def send_friend_invitation(
 
     if invitation_type == "email":
         if not invitee_email:
-            raise HTTPException(status_code=400, detail="invitee_email is required for email invitations")
+            raise HTTPException(
+                status_code=400,
+                detail="invitee_email is required for email invitations",
+            )
     elif invitation_type == "sms":
         if not invitee_phone:
-            raise HTTPException(status_code=400, detail="invitee_phone is required for SMS invitations")
+            raise HTTPException(
+                status_code=400, detail="invitee_phone is required for SMS invitations"
+            )
     else:
         raise HTTPException(status_code=400, detail="Invalid invitation_type")
 
@@ -221,7 +226,7 @@ async def send_friend_invitation(
         "message": "Invitation sent",
         "invitation_code": invitation_code,
         "status": status_value,
-        "invitation_type": invitation_type
+        "invitation_type": invitation_type,
     }
 
 
@@ -233,31 +238,37 @@ async def accept_friend_invitation(
 ):
     """Accept a friend invitation"""
     # Find the invitation
-    invitation = db.query(FriendInvitation).filter(
-        FriendInvitation.invitation_code == invitation_code,
-        FriendInvitation.status == "pending"
-    ).first()
-    
+    invitation = (
+        db.query(FriendInvitation)
+        .filter(
+            FriendInvitation.invitation_code == invitation_code,
+            FriendInvitation.status == "pending",
+        )
+        .first()
+    )
+
     if not invitation:
-        raise HTTPException(status_code=404, detail="Invitation not found or already used")
-    
+        raise HTTPException(
+            status_code=404, detail="Invitation not found or already used"
+        )
+
     # Create friendship
     friendship = Friendship(
         user_id=invitation.inviter_id,
         friend_id=current_user.id,
         status="accepted",
         is_accepted=True,
-        accepted_at=datetime.utcnow()
+        accepted_at=datetime.utcnow(),
     )
-    
+
     # Update invitation status
     invitation.status = "accepted"
     invitation.accepted_user_id = current_user.id
     invitation.accepted_at = datetime.utcnow()
-    
+
     db.add(friendship)
     db.commit()
-    
+
     return {"status": "accepted"}
 
 
@@ -270,11 +281,7 @@ async def get_invitation_status(
     # Stub implementation
     return {
         "invitations": [],
-        "analytics": {
-            "total_sent": 0,
-            "total_accepted": 0,
-            "acceptance_rate": 0.0
-        }
+        "analytics": {"total_sent": 0, "total_accepted": 0, "acceptance_rate": 0.0},
     }
 
 
@@ -288,7 +295,7 @@ async def import_contacts(
     # Stub implementation
     return {
         "existing_users": [],
-        "new_invitations": len(contacts_data.get("contacts", []))
+        "new_invitations": len(contacts_data.get("contacts", [])),
     }
 
 
@@ -307,7 +314,7 @@ async def create_community(
         "description": community_data.get("description", ""),
         "created_by": current_user.id,
         "category": community_data.get("category", "strength"),
-        "privacy_level": community_data.get("privacy_level", "public")
+        "privacy_level": community_data.get("privacy_level", "public"),
     }
 
 
@@ -335,7 +342,7 @@ async def get_community_recommendations(
                 "id": 1,
                 "name": "Strength Training Community",
                 "description": "For strength enthusiasts",
-                "match_score": 0.85
+                "match_score": 0.85,
             }
         ]
     }
@@ -350,11 +357,7 @@ async def community_matching_algorithm(
     # Stub implementation
     return {
         "matches": [
-            {
-                "community_id": 1,
-                "match_score": 0.85,
-                "reason": "Similar fitness goals"
-            }
+            {"community_id": 1, "match_score": 0.85, "reason": "Similar fitness goals"}
         ]
     }
 
@@ -381,7 +384,7 @@ async def get_privacy_controls(
     return {
         "profile_visibility": "public",
         "workout_visibility": "friends_only",
-        "stats_visibility": "private"
+        "stats_visibility": "private",
     }
 
 
@@ -406,29 +409,33 @@ async def block_user(
     """Block a user"""
     blocked_user_id = block_data.get("blocked_user_id")
     block_reason = block_data.get("block_reason", "No reason provided")
-    
+
     # Check if user exists
     blocked_user = db.query(User).filter(User.id == blocked_user_id).first()
     if not blocked_user:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     # Check if already blocked
-    existing_block = db.query(UserBlock).filter(
-        UserBlock.blocker_id == current_user.id,
-        UserBlock.blocked_id == blocked_user_id
-    ).first()
-    
+    existing_block = (
+        db.query(UserBlock)
+        .filter(
+            UserBlock.blocker_id == current_user.id,
+            UserBlock.blocked_id == blocked_user_id,
+        )
+        .first()
+    )
+
     if existing_block:
         return {"message": "User already blocked"}
-    
+
     # Create block record
     user_block = UserBlock(
         blocker_id=current_user.id,
         blocked_id=blocked_user_id,
         block_reason=block_reason,
-        block_type=block_data.get("block_type", "user")
+        block_type=block_data.get("block_type", "user"),
     )
-    
+
     db.add(user_block)
     db.flush()
     db.commit()
@@ -454,25 +461,25 @@ async def get_safety_status(
 ):
     """Get safety status including blocked users"""
     # Get blocked users
-    blocked_users = db.query(User).join(UserBlock).filter(
-        UserBlock.blocker_id == current_user.id
-    ).all()
-    
+    blocked_users = (
+        db.query(User)
+        .join(UserBlock)
+        .filter(UserBlock.blocker_id == current_user.id)
+        .all()
+    )
+
     # Get reports made by user
-    user_reports = db.query(UserReport).filter(
-        UserReport.reporter_id == current_user.id
-    ).all()
-    
+    user_reports = (
+        db.query(UserReport).filter(UserReport.reporter_id == current_user.id).all()
+    )
+
     return {
         "blocked_users": [
-            {
-                "user_id": user.id,
-                "username": user.username,
-                "email": user.email
-            } for user in blocked_users
+            {"user_id": user.id, "username": user.username, "email": user.email}
+            for user in blocked_users
         ],
         "reports_made": len(user_reports),
-        "safety_score": 95.0  # Stub value
+        "safety_score": 95.0,  # Stub value
     }
 
 
@@ -509,12 +516,8 @@ async def get_premium_features(
     """Get premium features"""
     # Stub implementation
     return {
-        "features": [
-            "Advanced Analytics",
-            "Custom Workout Plans",
-            "Priority Support"
-        ],
-        "is_premium": False
+        "features": ["Advanced Analytics", "Custom Workout Plans", "Priority Support"],
+        "is_premium": False,
     }
 
 

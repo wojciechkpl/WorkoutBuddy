@@ -5,6 +5,7 @@ Debug script to test the personalized challenges endpoint
 
 import sys
 import os
+
 sys.path.insert(0, os.path.dirname(__file__))
 
 from fastapi.testclient import TestClient
@@ -38,8 +39,7 @@ token = get_test_token(user)
 
 # Test the endpoint
 response = client.get(
-    "/api/v1/challenges/personalized",
-    headers={"Authorization": f"Bearer {token}"}
+    "/api/v1/challenges/personalized", headers={"Authorization": f"Bearer {token}"}
 )
 
 print(f"Status Code: {response.status_code}")
@@ -48,4 +48,4 @@ print(f"Response Body: {response.text}")
 
 # Clean up
 app.dependency_overrides.clear()
-db_session.close() 
+db_session.close()

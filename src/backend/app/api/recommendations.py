@@ -217,18 +217,34 @@ def get_onboarding_recommendations(
         "recommendations": [
             "Complete your first workout",
             "Join a fitness community",
-            "Set up accountability partnerships"
+            "Set up accountability partnerships",
         ],
         "challenges": [
-            {"id": 1, "name": "7-Day Starter Challenge", "description": "Complete a workout every day for a week."},
-            {"id": 2, "name": "Community Joiner", "description": "Join your first community group."}
+            {
+                "id": 1,
+                "name": "7-Day Starter Challenge",
+                "description": "Complete a workout every day for a week.",
+            },
+            {
+                "id": 2,
+                "name": "Community Joiner",
+                "description": "Join your first community group.",
+            },
         ],
         "communities": [
-            {"id": 1, "name": "Beginners United", "description": "A welcoming group for new members."},
-            {"id": 2, "name": "Strength Seekers", "description": "For those focused on strength training."}
+            {
+                "id": 1,
+                "name": "Beginners United",
+                "description": "A welcoming group for new members.",
+            },
+            {
+                "id": 2,
+                "name": "Strength Seekers",
+                "description": "For those focused on strength training.",
+            },
         ],
         "friends_suggestions": [
             {"id": 1, "username": "fit_jane", "mutual_friends": 3},
-            {"id": 2, "username": "workout_mike", "mutual_friends": 2}
-        ]
+            {"id": 2, "username": "workout_mike", "mutual_friends": 2},
+        ],
     }

@@ -4,7 +4,15 @@ Friendship model for social features
 """
 
 from datetime import datetime
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, UniqueConstraint, String
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    UniqueConstraint,
+    String,
+)
 from sqlalchemy.orm import relationship
 from app.database import Base
 

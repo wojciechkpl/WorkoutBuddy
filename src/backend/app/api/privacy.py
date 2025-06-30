@@ -4,6 +4,7 @@ from app.models.user import User
 
 router = APIRouter()
 
+
 @router.post("/controls")
 def set_privacy_controls(
     privacy_data: dict,
@@ -12,6 +13,7 @@ def set_privacy_controls(
     """Set privacy controls"""
     # Stub implementation
     return {"message": "Privacy controls updated successfully"}
+
 
 @router.get("/controls")
 def get_privacy_controls(
@@ -22,8 +24,9 @@ def get_privacy_controls(
     return {
         "profile_visibility": "public",
         "workout_visibility": "friends_only",
-        "stats_visibility": "private"
+        "stats_visibility": "private",
     }
+
 
 @router.post("/account-type")
 def account_type_management(
@@ -32,4 +35,4 @@ def account_type_management(
 ):
     """Manage account type (public/private)"""
     # Stub implementation
-    return {"message": "Account type updated successfully"} 
+    return {"message": "Account type updated successfully"}

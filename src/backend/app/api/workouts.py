@@ -24,6 +24,266 @@ from app.services.workout_service import WorkoutService
 router = APIRouter()
 
 
+# Test data endpoints (no authentication required)
+@router.get("/test/sample", response_model=list[WorkoutResponse])
+async def get_test_workouts() -> list[dict]:
+    """
+    Get sample workout data for testing (no authentication required)
+    """
+    return [
+        {
+            "id": 1,
+            "name": "Upper Body Strength",
+            "description": "Focus on chest, back, and shoulders",
+            "scheduled_date": datetime.now().date(),
+            "status": "planned",
+            "started_at": None,
+            "completed_at": None,
+            "total_duration": None,
+            "calories_burned": None,
+            "total_volume": None,
+            "total_distance": None,
+            "notes": None,
+            "created_at": datetime.now(),
+            "updated_at": datetime.now(),
+            "user_id": 1,
+            "exercises": [
+                {
+                    "id": 1,
+                    "exercise_id": 1,
+                    "workout_id": 1,
+                    "sets": 3,
+                    "reps": "10-12",
+                    "weight": "135.0",
+                    "duration": None,
+                    "distance": None,
+                    "speed": None,
+                    "incline": None,
+                    "rest_time": 90,
+                    "actual_reps": None,
+                    "actual_weight": None,
+                    "notes": "Focus on form",
+                    "order": 1,
+                    "weight_unit": "LBS",
+                    "distance_unit": None,
+                    "exercise": {
+                        "id": 1,
+                        "name": "Bench Press",
+                        "description": "Classic chest pressing exercise",
+                        "primary_muscle": "chest",
+                        "secondary_muscles": [],
+                        "equipment": "barbell",
+                        "exercise_type": "strength",
+                        "difficulty": 3,
+                        "instructions": "Lie on bench, lower bar to chest, press back up",
+                        "tips": None,
+                        "video_url": None,
+                        "is_distance_based": False,
+                        "is_time_based": False,
+                        "mets": 4.0,
+                    },
+                },
+                {
+                    "id": 2,
+                    "exercise_id": 3,
+                    "workout_id": 1,
+                    "sets": 3,
+                    "reps": "8-10",
+                    "weight": None,
+                    "duration": None,
+                    "distance": None,
+                    "speed": None,
+                    "incline": None,
+                    "rest_time": 120,
+                    "actual_reps": None,
+                    "actual_weight": None,
+                    "notes": "Full range of motion",
+                    "order": 2,
+                    "weight_unit": None,
+                    "distance_unit": None,
+                    "exercise": {
+                        "id": 3,
+                        "name": "Pull-ups",
+                        "description": "Upper body pulling exercise",
+                        "primary_muscle": "back",
+                        "secondary_muscles": [],
+                        "equipment": "other",
+                        "exercise_type": "strength",
+                        "difficulty": 3,
+                        "instructions": "Hang from bar, pull body up until chin over bar, lower with control",
+                        "tips": None,
+                        "video_url": None,
+                        "is_distance_based": False,
+                        "is_time_based": False,
+                        "mets": 4.0,
+                    },
+                },
+            ],
+        },
+        {
+            "id": 2,
+            "name": "Lower Body Power",
+            "description": "Build strength in legs and glutes",
+            "scheduled_date": (datetime.now() + timedelta(days=1)).date(),
+            "status": "planned",
+            "started_at": None,
+            "completed_at": None,
+            "total_duration": None,
+            "calories_burned": None,
+            "total_volume": None,
+            "total_distance": None,
+            "notes": None,
+            "created_at": datetime.now(),
+            "updated_at": datetime.now(),
+            "user_id": 1,
+            "exercises": [
+                {
+                    "id": 3,
+                    "exercise_id": 2,
+                    "workout_id": 2,
+                    "sets": 4,
+                    "reps": "12-15",
+                    "weight": None,
+                    "duration": None,
+                    "distance": None,
+                    "speed": None,
+                    "incline": None,
+                    "rest_time": 60,
+                    "actual_reps": None,
+                    "actual_weight": None,
+                    "notes": "Go deep, keep chest up",
+                    "order": 1,
+                    "weight_unit": None,
+                    "distance_unit": None,
+                    "exercise": {
+                        "id": 2,
+                        "name": "Squats",
+                        "description": "Fundamental lower body exercise",
+                        "primary_muscle": "legs",
+                        "secondary_muscles": [],
+                        "equipment": "bodyweight",
+                        "exercise_type": "strength",
+                        "difficulty": 3,
+                        "instructions": "Stand with feet shoulder-width apart, lower hips back and down, return to standing",
+                        "tips": None,
+                        "video_url": None,
+                        "is_distance_based": False,
+                        "is_time_based": False,
+                        "mets": 4.0,
+                    },
+                },
+                {
+                    "id": 4,
+                    "exercise_id": 4,
+                    "workout_id": 2,
+                    "sets": 3,
+                    "reps": "8-10",
+                    "weight": "225.0",
+                    "duration": None,
+                    "distance": None,
+                    "speed": None,
+                    "incline": None,
+                    "rest_time": 180,
+                    "actual_reps": None,
+                    "actual_weight": None,
+                    "notes": "Keep back straight",
+                    "order": 2,
+                    "weight_unit": "LBS",
+                    "distance_unit": None,
+                    "exercise": {
+                        "id": 4,
+                        "name": "Deadlift",
+                        "description": "Compound posterior chain exercise",
+                        "primary_muscle": "back",
+                        "secondary_muscles": [],
+                        "equipment": "barbell",
+                        "exercise_type": "strength",
+                        "difficulty": 3,
+                        "instructions": "Stand with feet hip-width, grip bar, lift by extending hips and knees",
+                        "tips": None,
+                        "video_url": None,
+                        "is_distance_based": False,
+                        "is_time_based": False,
+                        "mets": 4.0,
+                    },
+                },
+            ],
+        },
+    ]
+
+
+@router.get("/test/stats", response_model=WorkoutStats)
+async def get_test_workout_stats() -> WorkoutStats:
+    """
+    Get sample workout statistics for testing (no authentication required)
+    """
+    return WorkoutStats(
+        total_workouts=12,
+        completed_workouts=8,
+        total_duration=390,  # 6 hours 30 minutes in minutes
+        total_calories=2400,
+        total_volume=15000.0,  # in user's preferred weight unit
+        total_distance=125.5,  # in user's preferred distance unit
+        favorite_exercises=[
+            {"exercise_name": "Bench Press", "count": 15},
+            {"exercise_name": "Squats", "count": 12},
+            {"exercise_name": "Deadlift", "count": 10},
+        ],
+        muscle_group_distribution={
+            "chest": 25,
+            "back": 20,
+            "legs": 30,
+            "shoulders": 15,
+            "arms": 10,
+        },
+    )
+
+
+@router.get("/test/upcoming")
+async def get_test_upcoming_workouts() -> list[WorkoutResponse]:
+    """
+    Get sample upcoming workouts for testing (no authentication required)
+    """
+    return [
+        {
+            "id": 3,
+            "name": "Cardio Session",
+            "description": "30 minutes of cardio",
+            "scheduled_date": (datetime.now() + timedelta(days=2)).date(),
+            "status": "planned",
+            "started_at": None,
+            "completed_at": None,
+            "total_duration": None,
+            "calories_burned": None,
+            "total_volume": None,
+            "total_distance": None,
+            "notes": None,
+            "created_at": datetime.now(),
+            "updated_at": datetime.now(),
+            "user_id": 1,
+            "exercises": [],
+        },
+        {
+            "id": 4,
+            "name": "Full Body Circuit",
+            "description": "High intensity circuit training",
+            "scheduled_date": (datetime.now() + timedelta(days=3)).date(),
+            "status": "planned",
+            "started_at": None,
+            "completed_at": None,
+            "total_duration": None,
+            "calories_burned": None,
+            "total_volume": None,
+            "total_distance": None,
+            "notes": None,
+            "created_at": datetime.now(),
+            "updated_at": datetime.now(),
+            "user_id": 1,
+            "exercises": [],
+        },
+    ]
+
+
 @router.post("/", response_model=WorkoutResponse)
 async def create_workout(
     workout_data: WorkoutCreate,

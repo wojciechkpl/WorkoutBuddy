@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
 
+
 class FriendInvitation(Base):
     __tablename__ = "friend_invitations"
 
@@ -20,4 +21,4 @@ class FriendInvitation(Base):
     inviter = relationship("User", foreign_keys=[inviter_id])
 
     def __repr__(self):
-        return f"<FriendInvitation(inviter_id={self.inviter_id}, invitee_email={self.invitee_email}, code={self.invitation_code}, status={self.status})>" 
+        return f"<FriendInvitation(inviter_id={self.inviter_id}, invitee_email={self.invitee_email}, code={self.invitation_code}, status={self.status})>"

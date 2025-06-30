@@ -7,6 +7,7 @@ router = APIRouter()
 # In-memory store for blocked users: {user_id: set(blocked_user_ids)}
 blocked_users_store = {}
 
+
 @router.post("/block")
 def block_user(
     block_data: dict,
@@ -22,6 +23,7 @@ def block_user(
     blocked_users_store[user_id].add(blocked_user_id)
     return {"message": "User blocked successfully"}
 
+
 @router.post("/report")
 def report_content(
     report_data: dict,
@@ -31,17 +33,12 @@ def report_content(
     # Stub implementation
     return {"message": "Report submitted successfully"}
 
+
 @router.get("/status")
 def get_safety_status(
     current_user: User = Depends(get_current_user),
 ):
     """Get safety status and settings"""
     user_id = current_user.id
-    blocked = [
-        {"user_id": uid} for uid in blocked_users_store.get(user_id, set())
-    ]
-    return {
-        "blocked_users": blocked,
-        "reported_content": [],
-        "safety_level": "normal"
-    } 
+    blocked = [{"user_id": uid} for uid in blocked_users_store.get(user_id, set())]
+    return {"blocked_users": blocked, "reported_content": [], "safety_level": "normal"}

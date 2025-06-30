@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 
+
 @router.post("/partnerships")
 def create_accountability_partnership(
     partnership_data: dict,
@@ -15,6 +16,7 @@ def create_accountability_partnership(
     """Stub: Create accountability partnership"""
     return {"message": "Accountability partnership created"}
 
+
 @router.get("/partners")
 def get_accountability_partners(
     current_user: User = Depends(get_current_user),
@@ -23,6 +25,7 @@ def get_accountability_partners(
     """Stub: Get accountability partners"""
     return {"partners": []}
 
+
 @router.post("/checkins")
 def create_accountability_checkin(
     checkin_data: dict,
@@ -30,4 +33,4 @@ def create_accountability_checkin(
     db: Session = Depends(get_db),
 ):
     """Stub: Create accountability check-in"""
-    return {"message": "Accountability check-in created"} 
+    return {"message": "Accountability check-in created"}
